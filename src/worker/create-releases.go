@@ -54,9 +54,8 @@ func process(releaseDirPath string, index *ReleaseIndex, meta4 Meta4) error {
 			return fmt.Errorf("Checking if release is missing: release=%#v %s", release, err)
 		}
 
-		fmt.Printf("[%s] skipping\n", release.NameVersion())
-
 		if !missing {
+			fmt.Printf("[%s] skipping\n", release.NameVersion())
 			continue
 		}
 
@@ -67,7 +66,7 @@ func process(releaseDirPath string, index *ReleaseIndex, meta4 Meta4) error {
 			return fmt.Errorf("Processing release: release=%#v %s", release, err)
 		}
 
-		fmt.Printf("[%s] processing tarball\n", release.NameVersion())
+		fmt.Printf("[%s] processed tarball\n", release.NameVersion())
 
 		meta4Path, err := meta4.Create(file)
 		if err != nil {

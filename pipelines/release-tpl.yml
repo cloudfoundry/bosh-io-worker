@@ -28,6 +28,8 @@ jobs:
     - get: worker
     - get: release
       trigger: true
+      params:
+        submodules: none
     - get: releases-index
   - task: create-release
     params:
@@ -38,24 +40,29 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: "golang/1.8.3"
+          repository: "golang"
+          tag: "1.8.3"
       inputs:
+      - name: release
       - name: releases-index
+        path: releases-index-input
       - name: worker
       outputs:
       - name: releases-index
-        path: releases-index-output
       run:
         path: bash
         args:
-        - -euc
+        - -c
         - |
-          #!/bin/bash
-          wget -o /usr/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.28-linux-amd64
-          echo "7b7629fcdf8839cf29bf25d97e8ea6beb3b9a7b2  /usr/bin/bosh" | shasum -c /usr/bin/bosh
-          wget -o /usr/bin/meta4 https://github.com/dpb587/metalink/releases/download/v0.1.0/meta4-0.1.0-linux-amd64
-          echo "235bc60706793977446529830c2cb319e6aaf2da  /usr/bin/meta4" | shasum -c /usr/bin/meta4
+          set -eu
+          wget -O /usr/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.28-linux-amd64
+          echo "7b7629fcdf8839cf29bf25d97e8ea6beb3b9a7b2  /usr/bin/bosh" | shasum -c -
+          chmod +x /usr/bin/bosh
+          wget -O /usr/bin/meta4 https://github.com/dpb587/metalink/releases/download/v0.1.0/meta4-0.1.0-linux-amd64
+          echo "235bc60706793977446529830c2cb319e6aaf2da  /usr/bin/meta4" | shasum -c -
+          chmod +x /usr/bin/meta4
           taskdir=$PWD
+          git clone releases-index-input releases-index
           export GOPATH=$taskdir/worker
           cd $GOPATH/src/worker
           go run create-releases.go "$taskdir/release" "$taskdir/releases-index/((release_repo))" "((release_min_version))" "((s3_endpoint))"
