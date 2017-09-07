@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	semver "github.com/cppforlife/go-semi-semantic/version"
+	gouuid "github.com/nu7hatch/gouuid"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -220,14 +221,19 @@ func (i ReleaseIndex) Missing(release Release) (bool, error) {
 func (i ReleaseIndex) Commit(release Release, meta4Path string) error {
 	releaseDir := filepath.Join(i.DirPath, release.NameVersion())
 
-	err := os.Mkdir(releaseDir, os.ModePerm)
+	err := os.MkdirAll(releaseDir, os.ModePerm)
 	if err != nil {
 		return fmt.Errorf("Mkdir index directory: %s", err)
 	}
 
-	err = os.Rename(meta4Path, filepath.Join(releaseDir, "source.meta4"))
+	fileBytes, err := ioutil.ReadFile(meta4Path)
 	if err != nil {
-		return fmt.Errorf("Mkdir index directory: %s", err)
+		return fmt.Errorf("Reading metalink file: %s", err)
+	}
+
+	err = ioutil.WriteFile(filepath.Join(releaseDir, "source.meta4"), fileBytes, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("Writing metalink file: %s", err)
 	}
 
 	cmds := [][]string{
@@ -286,17 +292,15 @@ func (m Meta4) Create(file File) (string, error) {
 		return "", err
 	}
 
-	uuid, err := exec.Command("uuidgen").Output()
+	uuid, err := gouuid.NewV4()
 	if err != nil {
-		return "", fmt.Errorf("Generating file upload guid: %s", err)
+		return "", fmt.Errorf("Generating uuid: %s", err)
 	}
-
-	uuidStr := strings.TrimSpace(strings.ToLower(string(uuid)))
 
 	_, err = m.execute([]string{
 		"file-upload",
 		fmt.Sprintf("file://%s", file.Path),
-		fmt.Sprintf("%s/%s", m.Dst, uuidStr),
+		fmt.Sprintf("%s/%s", m.Dst, uuid.String()),
 		"--file", file.Name,
 		"--metalink", meta4Path,
 	})

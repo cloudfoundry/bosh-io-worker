@@ -8,6 +8,12 @@
   revision = "576b6af77ae4f3ccef356902fb3b9a9ae22e0b11"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/nu7hatch/gouuid"
+  packages = ["."]
+  revision = "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
+
+[[projects]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -16,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0b8d9c6157d86599cd89049cabc764fe93d8e51fdcda74c4620513c4fc0b1a3c"
+  inputs-digest = "c72a15589bbf9c8114f4db37981863cb7a13054e5ca701d1bdb95974b65de80f"
   solver-name = "gps-cdcl"
   solver-version = 1
