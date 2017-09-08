@@ -12,6 +12,7 @@ $ go run sync-pipelines.go <(cat ~/workspace/bosh-io/releases/index.yml) ../../p
 
 ## Notes
 
+```
  schemaname |      relname      | n_live_tup
 ------------+-------------------+------------
  public     | checksums         |       5083
@@ -23,14 +24,12 @@ $ go run sync-pipelines.go <(cat ~/workspace/bosh-io/releases/index.yml) ../../p
  public     | jobs              |       3779
  public     | release_versions  |       3777
  public     | release_tarballs  |       3776
-
+```
 
 ```
 $ psql db-name -t -c "select convert_from(key, 'utf-8'), convert_from(value, 'utf-8') from release_versions;"| go run import-release-versions.go ~/workspace/bosh-io/releases-index/
-
 $ psql db-name -t -c "select convert_from(key, 'utf-8'), convert_from(value, 'utf-8') from jobs;"| go run import-release-jobs.go  ~/workspace/bosh-io/releases-index/
-
-psql db-name -t -c "select convert_from(key, 'utf-8'), convert_from(value, 'utf-8') from release_tarballs;"| go run import-release-tarballs.go  ~/workspace/bosh-io/releases-index/
+$ psql db-name -t -c "select convert_from(key, 'utf-8'), convert_from(value, 'utf-8') from release_tarballs;"| go run import-release-tarballs.go  ~/workspace/bosh-io/releases-index/
 ```
 
 ## TODO
