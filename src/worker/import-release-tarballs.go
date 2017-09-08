@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"bufio"
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
-	"io"
-	"strings"
 	"path/filepath"
-	"bufio"
+	"strings"
 )
 
 func main() {
@@ -27,12 +27,12 @@ type ReleaseTarballs struct {
 }
 
 type key struct {
-	Source string
+	Source     string
 	VersionRaw string
 }
 
 type tarballVal struct {
-	SHA1 string
+	SHA1   string
 	BlobID string
 }
 

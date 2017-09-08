@@ -1,15 +1,15 @@
 package main
 
 import (
+	"bufio"
+	"encoding/json"
 	"fmt"
 	"gopkg.in/yaml.v2"
-	"encoding/json"
+	"io"
 	"io/ioutil"
 	"os"
-	"io"
-	"strings"
 	"path/filepath"
-	"bufio"
+	"strings"
 )
 
 func main() {
@@ -28,7 +28,7 @@ type ReleaseVersions struct {
 }
 
 type key struct {
-	Source string
+	Source     string
 	VersionRaw string
 }
 
