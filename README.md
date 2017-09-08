@@ -12,7 +12,6 @@ Currently implemented via Concourse pipelines.
  public     | s3_bosh_init_bins |          1
  public     | s3_stemcells      |          1
 
-
  public     | jobs              |       3779
  public     | release_versions  |       3777
  public     | release_tarballs  |       3776
@@ -25,3 +24,11 @@ $ psql db-name -t -c "select convert_from(key, 'utf-8'), convert_from(value, 'ut
 
 psql db-name -t -c "select convert_from(key, 'utf-8'), convert_from(value, 'utf-8') from release_tarballs;"| go run import-release-tarballs.go  ~/workspace/bosh-io/releases-index/
 ```
+
+## TODO
+
+- docker image for release tpl pipeline
+- import jobs.yml and release.yml
+- use production bucket
+- have dedicated ci worker
+- consolidate pipelines into org pipelines

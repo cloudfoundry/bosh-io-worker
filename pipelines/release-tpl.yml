@@ -58,7 +58,7 @@ jobs:
           wget -O /usr/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.28-linux-amd64
           echo "7b7629fcdf8839cf29bf25d97e8ea6beb3b9a7b2  /usr/bin/bosh" | shasum -c -
           chmod +x /usr/bin/bosh
-          wget -O /usr/bin/meta4 https://github.com/dpb587/metalink/releases/download/v0.1.0/meta4-0.1.0-linux-amd64
+          wget -O /usr/bin/meta4 https://s3.amazonaws.com/dk-shared-assets/meta4-0.1.0-linux-amd64
           echo "235bc60706793977446529830c2cb319e6aaf2da  /usr/bin/meta4" | shasum -c -
           chmod +x /usr/bin/meta4
           taskdir=$PWD
