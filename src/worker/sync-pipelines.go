@@ -124,13 +124,19 @@ func (c Concourse) checkBoshIOTeam(pipelines []string) error {
 }
 
 func (c Concourse) updatePipeline(name string, def ReleaseDef) error {
+	minVer := def.MinVersion
+
+	if len(minVer) == 0 {
+		minVer = "0"
+	}
+
 	_, err := c.execute([]string{
 		"set-pipeline",
 		"-p", name,
 		"-c", c.ReleaseTplPath,
 		"-l", c.VarsPath,
 		"-v", "release_git_url=" + def.URL,
-		"-v", "release_min_version=" + def.MinVersion,
+		"-v", "release_min_version=" + minVer,
 		"-v", "release_repo=" + def.IndexDirectory(),
 	})
 	if err != nil {
