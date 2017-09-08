@@ -2,6 +2,14 @@
 
 Currently implemented via Concourse pipelines.
 
+## Usage
+
+```
+$ source .envrc
+$ cd src/worker
+$ go run sync-pipelines.go <(cat ~/workspace/bosh-io/releases/index.yml) ../../pipelines/release-tpl.yml ../../../secrets
+```
+
 ## Notes
 
  schemaname |      relname      | n_live_tup
