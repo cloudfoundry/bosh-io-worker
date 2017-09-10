@@ -5,8 +5,6 @@ resources:
   check_every: 5m
   source:
     uri: ((release_git_url))
-    paths:
-    - "releases/**/*.yml"
 
 - name: releases-index
   type: git
