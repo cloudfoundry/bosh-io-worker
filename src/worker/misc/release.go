@@ -25,7 +25,7 @@ import (
 type ReleaseFactory struct {}
 
 func (f ReleaseFactory) New(releaseDirPath, mfPath string) Release {
-	logger := boshlog.NewWriterLogger(boshlog.LevelDebug, os.Stderr)
+	logger := boshlog.NewWriterLogger(boshlog.LevelError, os.Stderr)
 	fs := boshsys.NewOsFileSystem(logger)
 	runner := boshsys.NewExecCmdRunner(logger)
 
