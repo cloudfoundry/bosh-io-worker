@@ -1,17 +1,13 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	semver "github.com/cppforlife/go-semi-semantic/version"
-	gouuid "github.com/nu7hatch/gouuid"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
 	"os"
-	"os/exec"
+	"fmt"
 	"path/filepath"
-	"strings"
+
+	semver "github.com/cppforlife/go-semi-semantic/version"
+
+	. "worker/misc"
 )
 
 func main() {
@@ -28,6 +24,8 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("Failed: %s", err))
 	}
+
+	fmt.Printf("Done\n")
 }
 
 func process(releaseDirPath string, index *ReleaseIndex, meta4 Meta4) error {
@@ -38,9 +36,11 @@ func process(releaseDirPath string, index *ReleaseIndex, meta4 Meta4) error {
 		return fmt.Errorf("Globbing release: %s", err)
 	}
 
+	releaseFactory := ReleaseFactory{}
+
 	for _, path := range foundReleaseMFPaths {
 		if filepath.Base(path) != "index.yml" {
-			releases = append(releases, Release{DirPath: releaseDirPath, MFPath: path})
+			releases = append(releases, releaseFactory.New(releaseDirPath, path))
 		}
 	}
 
@@ -62,7 +62,7 @@ func process(releaseDirPath string, index *ReleaseIndex, meta4 Meta4) error {
 
 		fmt.Printf("[%s] importing\n", release.NameVersion())
 
-		file, err := release.Process()
+		relMeta, jobsMeta, file, err := release.Process()
 		if err != nil {
 			return fmt.Errorf("Processing release: release=%#v %s", release, err)
 		}
@@ -76,7 +76,7 @@ func process(releaseDirPath string, index *ReleaseIndex, meta4 Meta4) error {
 
 		fmt.Printf("[%s] created metalink\n", release.NameVersion())
 
-		err = index.Commit(release, meta4Path)
+		err = index.Commit(release, relMeta, jobsMeta, meta4Path)
 		if err != nil {
 			return fmt.Errorf("Committing to index: release=%#v %s", release, err)
 		}
@@ -85,243 +85,4 @@ func process(releaseDirPath string, index *ReleaseIndex, meta4 Meta4) error {
 	}
 
 	return nil
-}
-
-type Release struct {
-	DirPath string
-	MFPath  string
-}
-
-type CreateReleaseResultJSON struct {
-	Tables []CLITableJSON
-}
-
-type CLITableJSON struct {
-	Rows []CreateReleaseResultRowJSON
-}
-
-type CreateReleaseResultRowJSON struct {
-	Name    string
-	Version string
-}
-
-type ReleaseManifest struct {
-	Version string
-}
-
-func (r Release) Version() (semver.Version, error) {
-	manifestBytes, err := ioutil.ReadFile(r.MFPath)
-	if err != nil {
-		return semver.Version{}, fmt.Errorf("Reading release manifest: %s", err)
-	}
-
-	var manifest ReleaseManifest
-
-	err = yaml.Unmarshal(manifestBytes, &manifest)
-	if err != nil {
-		return semver.Version{}, fmt.Errorf("Deserializing manifest: %s", err)
-	}
-
-	ver, err := semver.NewVersionFromString(manifest.Version)
-	if err != nil {
-		return semver.Version{}, fmt.Errorf("Parsing release version: %s", err)
-	}
-
-	return ver, nil
-}
-
-func (r Release) NameVersion() string {
-	return strings.TrimSuffix(filepath.Base(r.MFPath), ".yml")
-}
-
-func (r Release) Process() (File, error) {
-	tarballPath := "/tmp/release"
-
-	out, err := r.execute("bosh", []string{"create-release", r.MFPath, "--tarball", tarballPath, "--json"}, r.DirPath)
-	if err != nil {
-		return File{}, fmt.Errorf("Building tarball: %s", err)
-	}
-
-	var result CreateReleaseResultJSON
-
-	err = json.Unmarshal(out, &result)
-	if err != nil {
-		return File{}, fmt.Errorf("Unmarshaling create release result: %s", err)
-	}
-
-	row := result.Tables[0].Rows[0]
-
-	return File{Path: tarballPath, Name: row.Name + "-" + row.Version + ".tgz", Version: row.Version}, nil
-}
-
-func (Release) execute(path string, args []string, dir string) ([]byte, error) {
-	cmd := exec.Command(path, args...)
-	cmd.Dir = dir
-
-	cmd.Env = append(
-		os.Environ(),
-		"BOSH_NON_INTERACTIVE=true",
-		"HOME=/tmp",
-	)
-
-	var outBuf, errBuf bytes.Buffer
-	cmd.Stdout = &outBuf
-	cmd.Stderr = &errBuf
-
-	err := cmd.Run()
-	if err != nil {
-		return nil, fmt.Errorf("executing %s: %s (stdout: %s stderr: %s)", path, err, outBuf.Bytes(), errBuf.String())
-	}
-
-	return outBuf.Bytes(), nil
-}
-
-type File struct {
-	Path    string
-	Name    string
-	Version string
-}
-
-type ReleaseIndex struct {
-	DirPath    string
-	MinVersion semver.Version
-	indexPaths []string
-}
-
-func (i *ReleaseIndex) Load() error {
-	var err error
-
-	i.indexPaths, err = filepath.Glob(filepath.Join(i.DirPath, "*"))
-	if err != nil {
-		return fmt.Errorf("Globbing index: %s", err)
-	}
-
-	return nil
-}
-
-func (i ReleaseIndex) Missing(release Release) (bool, error) {
-	ver, err := release.Version()
-	if err != nil {
-		return false, err
-	}
-
-	if i.MinVersion.IsGt(ver) {
-		return false, nil
-	}
-
-	for _, path := range i.indexPaths {
-		if filepath.Base(path) == release.NameVersion() {
-			return false, nil
-		}
-	}
-
-	return true, nil
-}
-
-func (i ReleaseIndex) Commit(release Release, meta4Path string) error {
-	releaseDir := filepath.Join(i.DirPath, release.NameVersion())
-
-	err := os.MkdirAll(releaseDir, os.ModePerm)
-	if err != nil {
-		return fmt.Errorf("Mkdir index directory: %s", err)
-	}
-
-	fileBytes, err := ioutil.ReadFile(meta4Path)
-	if err != nil {
-		return fmt.Errorf("Reading metalink file: %s", err)
-	}
-
-	err = ioutil.WriteFile(filepath.Join(releaseDir, "source.meta4"), fileBytes, os.ModePerm)
-	if err != nil {
-		return fmt.Errorf("Writing metalink file: %s", err)
-	}
-
-	cmds := [][]string{
-		[]string{"config", "--local", "user.email", "bosh-io-worker"},
-		[]string{"config", "--local", "user.name", "bosh-io-worker"},
-		[]string{"add", "-A"},
-		[]string{"commit", "-m", "add " + release.NameVersion()},
-	}
-
-	for _, cmd := range cmds {
-		_, err = i.execGit(cmd)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (i ReleaseIndex) execGit(args []string) ([]byte, error) {
-	cmd := exec.Command("git", args...)
-	cmd.Dir = i.DirPath
-
-	var outBuf, errBuf bytes.Buffer
-	cmd.Stdout = &outBuf
-	cmd.Stderr = &errBuf
-
-	err := cmd.Run()
-	if err != nil {
-		return nil, fmt.Errorf("executing git: %s (stderr: %s)", err, errBuf.String())
-	}
-
-	return outBuf.Bytes(), nil
-}
-
-type Meta4 struct {
-	Dst string
-}
-
-func (m Meta4) Create(file File) (string, error) {
-	meta4Path := "/tmp/metalink"
-
-	_, err := m.execute([]string{"create", "--metalink", meta4Path})
-	if err != nil {
-		return "", err
-	}
-
-	_, err = m.execute([]string{
-		"import-file",
-		fmt.Sprintf("file://%s", file.Path),
-		"--version", file.Version,
-		"--file", file.Name,
-		"--metalink", meta4Path,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	uuid, err := gouuid.NewV4()
-	if err != nil {
-		return "", fmt.Errorf("Generating uuid: %s", err)
-	}
-
-	_, err = m.execute([]string{
-		"file-upload",
-		fmt.Sprintf("file://%s", file.Path),
-		fmt.Sprintf("%s/%s", m.Dst, uuid.String()),
-		"--file", file.Name,
-		"--metalink", meta4Path,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	return meta4Path, nil
-}
-
-func (Meta4) execute(args []string) ([]byte, error) {
-	cmd := exec.Command("meta4", args...)
-
-	var outBuf, errBuf bytes.Buffer
-	cmd.Stdout = &outBuf
-	cmd.Stderr = &errBuf
-
-	err := cmd.Run()
-	if err != nil {
-		return nil, fmt.Errorf("executing meta4: %s %v (stderr: %s)", err, args, errBuf.String())
-	}
-
-	return outBuf.Bytes(), nil
 }
