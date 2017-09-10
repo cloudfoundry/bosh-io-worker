@@ -18,6 +18,7 @@ import (
 	bptar "github.com/cppforlife/bosh-provisioner/tar"
 	bprel "github.com/cppforlife/bosh-provisioner/release"
 	bpreljob "github.com/cppforlife/bosh-provisioner/release/job"
+	gouuid "github.com/nu7hatch/gouuid"
 	"gopkg.in/yaml.v2"
 )
 
@@ -96,7 +97,12 @@ func (r Release) Process() (bprel.Release, []bpreljob.Job, File, error) {
 	var relMeta bprel.Release
 	var jobsMeta []bpreljob.Job
 
-	tarballPath := "/tmp/release"
+	fileUUID, err := gouuid.NewV4()
+	if err != nil {
+		return relMeta, jobsMeta, File{}, fmt.Errorf("Generating tarball uuid: %s", err)
+	}
+
+	tarballPath := "/tmp/release-"+fileUUID.String()
 
 	out, err := r.execute("bosh", []string{"create-release", r.MFPath, "--tarball", tarballPath, "--json"}, r.DirPath)
 	if err != nil {

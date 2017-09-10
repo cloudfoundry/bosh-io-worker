@@ -13,9 +13,14 @@ type Meta4 struct {
 }
 
 func (m Meta4) Create(file File) (string, error) {
-	meta4Path := "/tmp/metalink"
+	fileUUID, err := gouuid.NewV4()
+	if err != nil {
+		return "", fmt.Errorf("Generating metalink uuid: %s", err)
+	}
 
-	_, err := m.execute([]string{"create", "--metalink", meta4Path})
+	meta4Path := "/tmp/metalink-"+fileUUID.String()
+
+	_, err = m.execute([]string{"create", "--metalink", meta4Path})
 	if err != nil {
 		return "", err
 	}
