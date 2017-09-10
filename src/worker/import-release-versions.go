@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io"
 	"io/ioutil"
 	"os"
@@ -78,7 +77,7 @@ func (r ReleaseVersions) Import(data io.Reader) error {
 			return fmt.Errorf("Unmarshaling val: %s: %s", pieces[1], err)
 		}
 
-		bytes, err := yaml.Marshal(val)
+		bytes, err := json.MarshalIndent(val, "", "  ")
 		if err != nil {
 			return fmt.Errorf("Marshaling val: %s", err)
 		}

@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io"
 	"io/ioutil"
 	"os"
@@ -78,12 +77,12 @@ func (r ReleaseJobs) Import(data io.Reader) error {
 
 		var js jobs
 
-		err = yaml.Unmarshal([]byte(pieces[1]), &js)
+		err = json.Unmarshal([]byte(pieces[1]), &js)
 		if err != nil {
 			return fmt.Errorf("Unmarshaling value: %s", pieces[1])
 		}
 
-		jsBytes, err := yaml.Marshal(js)
+		jsBytes, err := json.MarshalIndent(js, "", "  ")
 		if err != nil {
 			return fmt.Errorf("Marshaling value: %s", err)
 		}
