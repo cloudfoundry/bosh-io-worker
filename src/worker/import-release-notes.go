@@ -16,13 +16,13 @@ func main() {
 		panic(fmt.Sprintf("Wrong args: bosh-io-releases-index-dir(eg releases-index)"))
 	}
 
-	err := ReleaseTarballs{ReleasesIndexDir: os.Args[1]}.Import(os.Stdin)
+	err := ReleaseNotes{ReleasesIndexDir: os.Args[1]}.Import(os.Stdin)
 	if err != nil {
 		panic(fmt.Sprintf("Failed: %s", err))
 	}
 }
 
-type ReleaseTarballs struct {
+type ReleaseNotes struct {
 	ReleasesIndexDir string
 }
 
@@ -36,7 +36,7 @@ type noteVal struct {
 }
 
 // eg   {"Source":"github.com/cloudfoundry-incubator/diego-release","VersionRaw":"0.549"} | {"Content":"..."}
-func (r ReleaseTarballs) Import(data io.Reader) error {
+func (r ReleaseNotes) Import(data io.Reader) error {
 	rd := bufio.NewReader(data)
 	for {
 		line, err := rd.ReadString('\n')

@@ -1,0 +1,61 @@
+---
+resources:
+- name: releases
+  type: git
+  source:
+    uri: ((release_git_url))
+    branch: master
+
+- name: releases-index
+  type: git
+  source:
+    uri: ((releases_index_git_url))
+    branch: master
+    private_key: ((releases_index_private_key))
+
+- name: worker
+  type: git
+  source:
+    uri: https://github.com/bosh-io/worker.git
+
+jobs:
+- name: sync-release-notes
+  serial: true
+  plan:
+  - aggregate:
+    - get: worker
+    - get: releases
+    - get: releases-index
+  - task: create-release
+    params:
+      GH_PERSONAL_ACCESS_TOKEN: ((gh_person_access_token))
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: "golang"
+          tag: "1.8.3"
+      inputs:
+      - name: releases
+      - name: releases-index
+        path: releases-index-input
+      - name: worker
+      outputs:
+      - name: releases-index
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -eu
+          taskdir=$PWD
+          git clone releases-index-input releases-index
+          export GOPATH=$taskdir/worker
+          cd $GOPATH/src/worker
+          go run sync-release-notes.go "$taskdir/releases/index.yml" "$taskdir/releases-index"
+    ensure:
+      put: releases-index
+      params:
+        repository: releases-index
+        rebase: true
