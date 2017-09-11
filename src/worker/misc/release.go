@@ -10,19 +10,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	semver "github.com/cppforlife/go-semi-semantic/version"
+	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	boshsys "github.com/cloudfoundry/bosh-utils/system"
-	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	bpdload "github.com/cppforlife/bosh-provisioner/downloader"
-	bptar "github.com/cppforlife/bosh-provisioner/tar"
 	bprel "github.com/cppforlife/bosh-provisioner/release"
 	bpreljob "github.com/cppforlife/bosh-provisioner/release/job"
+	bptar "github.com/cppforlife/bosh-provisioner/tar"
+	semver "github.com/cppforlife/go-semi-semantic/version"
 	gouuid "github.com/nu7hatch/gouuid"
 	"gopkg.in/yaml.v2"
 )
 
-type ReleaseFactory struct {}
+type ReleaseFactory struct{}
 
 func (f ReleaseFactory) New(releaseDirPath, mfPath string) Release {
 	logger := boshlog.NewWriterLogger(boshlog.LevelError, os.Stderr)
@@ -36,10 +36,10 @@ func (f ReleaseFactory) New(releaseDirPath, mfPath string) Release {
 
 	return Release{
 		DirPath: releaseDirPath,
-		MFPath: mfPath,
+		MFPath:  mfPath,
 
 		releaseReaderFactory: releaseReaderFactory,
-		jobReaderFactory: jobReaderFactory,
+		jobReaderFactory:     jobReaderFactory,
 	}
 }
 
@@ -102,7 +102,7 @@ func (r Release) Process() (bprel.Release, []bpreljob.Job, File, error) {
 		return relMeta, jobsMeta, File{}, fmt.Errorf("Generating tarball uuid: %s", err)
 	}
 
-	tarballPath := "/tmp/release-"+fileUUID.String()
+	tarballPath := "/tmp/release-" + fileUUID.String()
 
 	out, err := r.execute("bosh", []string{"create-release", r.MFPath, "--tarball", tarballPath, "--json"}, r.DirPath)
 	if err != nil {

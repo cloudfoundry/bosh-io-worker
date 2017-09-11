@@ -9,9 +9,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	semver "github.com/cppforlife/go-semi-semantic/version"
 	bprel "github.com/cppforlife/bosh-provisioner/release"
 	bpreljob "github.com/cppforlife/bosh-provisioner/release/job"
+	semver "github.com/cppforlife/go-semi-semantic/version"
 )
 
 type ReleaseIndex struct {

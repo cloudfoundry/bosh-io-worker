@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"path/filepath"
 
 	semver "github.com/cppforlife/go-semi-semantic/version"

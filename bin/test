@@ -1,0 +1,32 @@
+#!/bin/bash
+
+result=0
+
+bin=$(dirname $0)
+
+echo -e "\n Formatting packages..."
+go fmt worker/...
+let "result+=$?"
+
+echo -e "\n Vetting packages for potential issues..."
+go vet worker/...
+let "result+=$?"
+
+echo -e "\n Running build script to confirm everything compiles..."
+go build -o pkg/create-releases         src/worker/create-releases.go
+go build -o pkg/import-release-jobs     src/worker/import-release-jobs.go
+go build -o pkg/import-release-notes    src/worker/import-release-notes.go
+go build -o pkg/import-release-tarballs src/worker/import-release-tarballs.go
+go build -o pkg/import-release-versions src/worker/import-release-versions.go
+go build -o pkg/import-stemcell-notes   src/worker/import-stemcell-notes.go
+go build -o pkg/sync-pipelines          src/worker/sync-pipelines.go
+#go build -o pkg/sync-release-notes      src/worker/sync-release-notes.go
+let "result+=$?"
+
+if [ $result -eq 0 ]; then
+  echo -e "\nSUITE SUCCESS"
+else
+  echo -e "\nSUITE FAILURE"
+fi
+
+exit $result

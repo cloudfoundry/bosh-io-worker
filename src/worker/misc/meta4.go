@@ -18,7 +18,7 @@ func (m Meta4) Create(file File) (string, error) {
 		return "", fmt.Errorf("Generating metalink uuid: %s", err)
 	}
 
-	meta4Path := "/tmp/metalink-"+fileUUID.String()
+	meta4Path := "/tmp/metalink-" + fileUUID.String()
 
 	_, err = m.execute([]string{"create", "--metalink", meta4Path})
 	if err != nil {
