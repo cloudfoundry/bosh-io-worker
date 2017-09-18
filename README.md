@@ -36,6 +36,5 @@ $ psql db-name -t -c "select convert_from(key, 'utf-8'), convert_from(value, 'ut
 ## TODO
 
 - docker image for release tpl pipeline
-- use production bucket
 - have dedicated ci worker
 - consolidate pipelines into org pipelines
