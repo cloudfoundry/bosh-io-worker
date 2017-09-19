@@ -5,6 +5,7 @@ resources:
   check_every: 5m
   source:
     uri: ((release_git_url))
+    disable_ci_skip: true
 
 - name: releases-index
   type: git
