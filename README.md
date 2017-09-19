@@ -10,6 +10,10 @@ $ cd src/worker
 $ go run sync-pipelines.go <(cat ~/workspace/bosh-io/releases/index.yml) ../../pipelines/release-tpl.yml ../../../secrets
 ```
 
+```
+$ fly -t production set-pipeline -p pull-data -c pipelines/pull-data.yml -l ../secrets
+```
+
 ## Notes
 
 ```

@@ -1,0 +1,63 @@
+---
+resources:
+- name: bosh-hub
+  type: git
+  source:
+    uri: https://github.com/cppforlife/bosh-hub
+    branch: master
+- name: cf-cli
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry/cli
+    branch: v6.31.0
+- name: releases-index
+  type: git
+  source:
+    uri: ((releases_index_https_url))
+    branch: master
+- name: 1h
+  type: time
+  source:
+    interval: 1h
+
+jobs:
+- name: pull-data
+  serial: true
+  plan:
+  - aggregate:
+    - get: releases-index
+      trigger: true
+    - get: 1h
+      trigger: true
+    - get: cf-cli
+    - get: bosh-hub
+  - task: pull-data
+    params:
+      CF_USERNAME: ((cf_username))
+      CF_PASSWORD: ((cf_password))
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: "golang"
+          tag: "1.8.3"
+      inputs:
+      - name: bosh-hub
+      - name: cf-cli
+        path: src/code.cloudfoundry.org/cli
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -eu
+          dir=$PWD
+          export GOPATH=$dir
+          cd src/code.cloudfoundry.org/cli
+          make build || true # ignore some git problem
+          export PATH=$PWD/out:$PATH
+          cf api https://api.run.pivotal.io
+          cf auth "$CF_USERNAME" "$CF_PASSWORD"
+          cf target -o cfcommunity -s boshorg
+          exec $dir/bosh-hub/pull-data.sh
