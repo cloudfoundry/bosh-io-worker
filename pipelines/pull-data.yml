@@ -9,7 +9,6 @@ resources:
   type: git
   source:
     uri: https://github.com/cloudfoundry/cli
-    branch: v6.31.0
 - name: releases-index
   type: git
   source:
@@ -30,6 +29,8 @@ jobs:
     - get: 1h
       trigger: true
     - get: cf-cli
+      version:
+        ref: e2adc618bba80455c0820ea8099cc68c53438b98
     - get: bosh-hub
   - task: pull-data
     params:
