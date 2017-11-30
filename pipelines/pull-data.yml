@@ -12,7 +12,32 @@ resources:
 - name: releases-index
   type: git
   source:
-    uri: ((releases_index_https_url))
+    uri: https://github.com/bosh-io/releases-index
+    branch: master
+- name: stemcells-legacy-index
+  type: git
+  source:
+    uri: https://github.com/bosh-io/stemcells-legacy-index
+    branch: master
+- name: stemcells-core-index
+  type: git
+  source:
+    uri: https://github.com/bosh-io/stemcells-core-index
+    branch: master
+- name: stemcells-cpi-index
+  type: git
+  source:
+    uri: https://github.com/bosh-io/stemcells-cpi-index
+    branch: master
+- name: stemcells-softlayer-index
+  type: git
+  source:
+    uri: https://github.com/bosh-io/stemcells-softlayer-index
+    branch: master
+- name: stemcells-windows-index
+  type: git
+  source:
+    uri: https://github.com/bosh-io/stemcells-windows-index
     branch: master
 - name: 1h
   type: time
@@ -25,6 +50,16 @@ jobs:
   plan:
   - aggregate:
     - get: releases-index
+      trigger: true
+    - get: stemcells-legacy-index
+      trigger: true
+    - get: stemcells-core-index
+      trigger: true
+    - get: stemcells-cpi-index
+      trigger: true
+    - get: stemcells-softlayer-index
+      trigger: true
+    - get: stemcells-windows-index
       trigger: true
     - get: 1h
       trigger: true
