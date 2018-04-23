@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	. "worker/misc"
 )
@@ -148,6 +149,23 @@ func (c Concourse) pipelines() ([]string, error) {
 }
 
 func (c Concourse) execute(args []string) ([]byte, error) {
+	var lastErr error
+
+	for i := 0; i < 5; i++ {
+		bs, err := c.executeOnce(args)
+		if err == nil {
+			return bs, nil
+		}
+		lastErr = err
+
+		fmt.Printf("retrying fly cmd after 1s...\n")
+		time.Sleep(1 * time.Second)
+	}
+
+	return nil, fmt.Errorf("executing with retries: %s", lastErr)
+}
+
+func (c Concourse) executeOnce(args []string) ([]byte, error) {
 	cmd := exec.Command("fly", append([]string{"-t", "production"}, args...)...)
 
 	var outBuf, errBuf bytes.Buffer
@@ -157,7 +175,7 @@ func (c Concourse) execute(args []string) ([]byte, error) {
 
 	err := cmd.Run()
 	if err != nil {
-		return nil, fmt.Errorf("executing meta4: %s %v (stderr: %s)", err, args, errBuf.String())
+		return nil, fmt.Errorf("executing fly: %s %v (stderr: %s)", err, args, errBuf.String())
 	}
 
 	return outBuf.Bytes(), nil
