@@ -7,6 +7,7 @@ Currently implemented via Concourse pipelines.
 ```
 $ source .envrc
 $ cd src/worker
+$ lpass show bosh-io-pipelines-reconfigure-secrets --notes > ../../../secrets
 $ go run sync-pipelines.go <(cat ~/workspace/bosh-io/releases/index.yml) ../../pipelines/release-tpl.yml ../../../secrets
 ```
 
