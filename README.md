@@ -5,6 +5,7 @@ Currently implemented via Concourse pipelines.
 ## Usage
 
 ```
+$ fly login -t production -n bosh-io
 $ source .envrc
 $ cd src/worker
 $ lpass show bosh-io-pipelines-reconfigure-secrets --notes > ../../../secrets
