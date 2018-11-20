@@ -9,7 +9,7 @@ $ fly login -t production -n bosh-io
 $ source .envrc
 $ cd src/worker
 $ lpass show bosh-io-pipelines-reconfigure-secrets --notes > ../../../secrets
-$ go run sync-pipelines.go <(cat ~/workspace/bosh-io/releases/index.yml) ../../pipelines/release-tpl.yml ../../../secrets
+$ go run sync-pipelines.go <(cat ~/workspace/src/github.com/bosh-io/releases/index.yml) ../../pipelines/release-tpl.yml ../../../secrets
 ```
 
 ## Notes
