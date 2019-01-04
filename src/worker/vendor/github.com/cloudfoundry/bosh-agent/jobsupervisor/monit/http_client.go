@@ -11,15 +11,20 @@ import (
 	"golang.org/x/net/html/charset"
 
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
-	boshhttp "github.com/cloudfoundry/bosh-utils/http"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 )
 
+//go:generate counterfeiter . HTTPClient
+
+type HTTPClient interface {
+	Do(request *http.Request) (*http.Response, error)
+}
+
 type httpClient struct {
-	startClient     boshhttp.Client
-	stopClient      boshhttp.Client
-	unmonitorClient boshhttp.Client
-	statusClient    boshhttp.Client
+	startClient     HTTPClient
+	stopClient      HTTPClient
+	unmonitorClient HTTPClient
+	statusClient    HTTPClient
 	host            string
 	username        string
 	password        string
@@ -32,8 +37,8 @@ type httpClient struct {
 // unmonitor & stop use the longClient
 func NewHTTPClient(
 	host, username, password string,
-	shortClient boshhttp.Client,
-	longClient boshhttp.Client,
+	shortClient HTTPClient,
+	longClient HTTPClient,
 	logger boshlog.Logger,
 ) Client {
 	return httpClient{
@@ -67,12 +72,7 @@ func (c httpClient) StartService(serviceName string) error {
 	if err != nil {
 		return bosherr.WrapError(err, "Sending start request to monit")
 	}
-
-	defer func() {
-		if err := response.Body.Close(); err != nil {
-			c.logger.Warn("http-client", "Failed to close monit start POST response body: %s", err.Error())
-		}
-	}()
+	defer response.Body.Close()
 
 	err = c.validateResponse(response)
 	if err != nil {
@@ -89,12 +89,7 @@ func (c httpClient) StopService(serviceName string) error {
 	if err != nil {
 		return bosherr.WrapErrorf(err, "Sending stop request for service '%s'", serviceName)
 	}
-
-	defer func() {
-		if err := response.Body.Close(); err != nil {
-			c.logger.Warn("http-client", "Failed to close monit stop POST response body: %s", err.Error())
-		}
-	}()
+	defer response.Body.Close()
 
 	err = c.validateResponse(response)
 	if err != nil {
@@ -109,12 +104,7 @@ func (c httpClient) UnmonitorService(serviceName string) error {
 	if err != nil {
 		return bosherr.WrapError(err, "Sending unmonitor request to monit")
 	}
-
-	defer func() {
-		if err := response.Body.Close(); err != nil {
-			c.logger.Warn("http-client", "Failed to close monit unmonitor POST response body: %s", err.Error())
-		}
-	}()
+	defer response.Body.Close()
 
 	err = c.validateResponse(response)
 	if err != nil {
@@ -139,7 +129,7 @@ func (c httpClient) status() (status, error) {
 	}
 
 	defer func() {
-		if err := response.Body.Close(); err != nil {
+		if err = response.Body.Close(); err != nil {
 			c.logger.Warn("http-client", "Failed to close monit status GET response body: %s", err.Error())
 		}
 	}()
@@ -185,7 +175,7 @@ func (c httpClient) validateResponse(response *http.Response) error {
 	return bosherr.Errorf("Request failed with %s: %s", response.Status, string(body))
 }
 
-func (c httpClient) makeRequest(client boshhttp.Client, target url.URL, method, requestBody string) (*http.Response, error) {
+func (c httpClient) makeRequest(client HTTPClient, target url.URL, method, requestBody string) (*http.Response, error) {
 	c.logger.Debug("http-client", "Monit request: url='%s' body='%s'", target.String(), requestBody)
 
 	request, err := http.NewRequest(method, target.String(), strings.NewReader(requestBody))

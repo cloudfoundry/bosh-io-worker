@@ -2,110 +2,387 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:a324d70548baeaf58c5a453fafbd0a6bf0d97b584b18c2758a0f8250b6127082"
+  name = "code.cloudfoundry.org/clock"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "02e53af36e6c978af692887ed449b74026d76fec"
+
+[[projects]]
+  digest = "1:7294028ae4f4ebe9f92dccabdc69f63eba37b71fbfcdcb35ed1c32eb823fc6d4"
   name = "github.com/bmatcuk/doublestar"
   packages = ["."]
-  revision = "b3608229437ba4dc33dae64d56a79a2a73f1f6b2"
-  version = "v1.0.9"
+  pruneopts = "NUT"
+  revision = "85a78806aa1b4707d1dbace9be592cf1ece91ab3"
+  version = "v1.1.1"
 
 [[projects]]
   branch = "master"
+  digest = "1:bfd6b98cf43a82b899b91c6bfb0c858a2ca88abce2dc0c6519180e8f8546a369"
+  name = "github.com/bmizerany/pat"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "6226ea591a40176dd3ff9cd8eff81ed6ca721a00"
+
+[[projects]]
+  branch = "master"
+  digest = "1:58927c45bfdcd6550e5f1ab008eeeb6951474a232afa1dc690583f26c5f92cbd"
   name = "github.com/charlievieth/fs"
   packages = ["."]
+  pruneopts = "NUT"
   revision = "7dc373669fa10ddf827c37c595dee30a2f001be9"
 
 [[projects]]
   branch = "master"
+  digest = "1:dadd2829b5206df1b19eca11995ff94f8a0e1164ed0c54ff7335000aa08840cb"
   name = "github.com/cloudfoundry-incubator/candiedyaml"
   packages = ["."]
+  pruneopts = "NUT"
   revision = "a41693b7b7afb422c7ecb1028458ab27da047bbb"
 
 [[projects]]
+  digest = "1:4ccbaddcd868d329a95611dbc975e8de343a0deef801012cb57d3df003b49b47"
   name = "github.com/cloudfoundry/bosh-agent"
-  packages = ["agent/action","agent/action/state","agent/alert","agent/applier","agent/applier/applyspec","agent/applier/bundlecollection","agent/applier/jobs","agent/applier/models","agent/applier/packages","agent/cmdrunner","agent/compiler","agent/script","agent/script/drain","agent/script/pathenv","agent/task","handler","infrastructure/devicepathresolver","jobsupervisor","jobsupervisor/monit","jobsupervisor/monitor","jobsupervisor/winsvc","notification","platform","platform/cdrom","platform/cert","platform/deviceutil","platform/disk","platform/net","platform/net/arp","platform/net/ip","platform/ntp","platform/stats","platform/udevdevice","platform/vitals","settings","settings/directories","syslog"]
-  revision = "a8d1e528588b2951afd382dea95d3c5d4ad5efbf"
-  version = "v2.23.0"
+  packages = [
+    "agent/action",
+    "agent/action/state",
+    "agent/alert",
+    "agent/applier",
+    "agent/applier/applyspec",
+    "agent/applier/bundlecollection",
+    "agent/applier/jobs",
+    "agent/applier/models",
+    "agent/applier/packages",
+    "agent/blobstore",
+    "agent/cmdrunner",
+    "agent/compiler",
+    "agent/script",
+    "agent/script/cmd",
+    "agent/script/drain",
+    "agent/script/pathenv",
+    "agent/tarpath",
+    "agent/task",
+    "handler",
+    "infrastructure/devicepathresolver",
+    "jobsupervisor",
+    "jobsupervisor/monit",
+    "jobsupervisor/monitor",
+    "jobsupervisor/winsvc",
+    "notification",
+    "platform",
+    "platform/cdrom",
+    "platform/cert",
+    "platform/disk",
+    "platform/net",
+    "platform/net/arp",
+    "platform/net/ip",
+    "platform/openiscsi",
+    "platform/stats",
+    "platform/udevdevice",
+    "platform/vitals",
+    "platform/windows/disk",
+    "platform/windows/powershell",
+    "settings",
+    "settings/directories",
+  ]
+  pruneopts = "NUT"
+  revision = "25658b28630c6795a6df9e6e9ef4cf0dc24c3795"
+  version = "v2.183.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:a544a9a1d0c2f03ff16f4c5324eabcb5f06d67ba2d2ebc3b42242fad8072117a"
   name = "github.com/cloudfoundry/bosh-utils"
-  packages = ["blobstore","crypto","errors","fileutil","http","logger","retrystrategy","system","uuid"]
-  revision = "d3f4207d2deff6c8091a59a7aa331cade24b9dd5"
+  packages = [
+    "blobstore",
+    "crypto",
+    "errors",
+    "fileutil",
+    "httpclient",
+    "logger",
+    "retrystrategy",
+    "system",
+    "uuid",
+    "work",
+  ]
+  pruneopts = "NUT"
+  revision = "c2cf699102bd7878141b9810117cba777852f1be"
 
 [[projects]]
   branch = "master"
-  name = "github.com/cloudfoundry/gosigar"
+  digest = "1:3d3a6beb04065e29628f9d4f8fefeca4cc96932a8b0b83a03e9a3405b3538c11"
+  name = "github.com/cloudfoundry/go-socks5"
   packages = ["."]
-  revision = "f4030c18ce1a78252deadef2f5e460b35cce7ae5"
+  pruneopts = "NUT"
+  revision = "54f73bdb8a8e85a6611d3d29ab9bbf98c2a060d7"
 
 [[projects]]
   branch = "master"
+  digest = "1:06acaf3ae1057dbeca15a2a9c2ec0d2edc26d39c41ecf457ea55e559e34dce9b"
+  name = "github.com/cloudfoundry/gosigar"
+  packages = [
+    ".",
+    "sys/windows",
+  ]
+  pruneopts = "NUT"
+  revision = "50ddd08d81d770b1e0ce2c969a46e46c73580e2a"
+
+[[projects]]
+  branch = "master"
+  digest = "1:5f29a6db136978d1515aa9909eacc36beeed758fe7d191dfa19fb8a86e42a5ce"
+  name = "github.com/cloudfoundry/socks5-proxy"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "3659db090cb23a57807b53e2f8580b2427dc2659"
+
+[[projects]]
+  digest = "1:230944a4ec76791e0958de1b94f029d58f4541e3804fe9ba6ed9dd3269c72b7d"
+  name = "github.com/concourse/atc"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "f8bd990b2a64b380651ebb6c5999bbcad10de293"
+  version = "v4.2.2"
+
+[[projects]]
+  branch = "master"
+  digest = "1:c9e60b94d0818017607afc69d4a806d8848f82b502c7710ba86ff1de9c7b0ed8"
   name = "github.com/cppforlife/bosh-provisioner"
-  packages = ["deployment","deployment/manifest","downloader","release","release/job","release/job/manifest","release/manifest","tar","util"]
+  packages = [
+    "deployment",
+    "deployment/manifest",
+    "downloader",
+    "release",
+    "release/job",
+    "release/job/manifest",
+    "release/manifest",
+    "tar",
+    "util",
+  ]
+  pruneopts = "NUT"
   revision = "5cf80708a0ac188bef57e7be9e7a8bedd936b5fc"
 
 [[projects]]
   branch = "master"
+  digest = "1:6f6126af7313c78380367bb436b5a2ad8fc79ed0f4b3019ddd0ee1f8150e6877"
   name = "github.com/cppforlife/go-semi-semantic"
   packages = ["version"]
+  pruneopts = "NUT"
   revision = "576b6af77ae4f3ccef356902fb3b9a9ae22e0b11"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/jeromer/syslogparser"
-  packages = [".","rfc3164"]
-  revision = "0e4ae46ea3f08de351074b643d649d5d00661a3c"
+  digest = "1:97df918963298c287643883209a2c3f642e6593379f97ab400c2a2e219ab647d"
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  pruneopts = "NUT"
+  revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
+  version = "v1.2.0"
+
+[[projects]]
+  digest = "1:63ede27834b468648817fb80cfb95d40abfc61341f89cb7a0d6779b6aa955425"
+  name = "github.com/google/go-github"
+  packages = ["github"]
+  pruneopts = "NUT"
+  revision = "a5cb647b1fac8ba77e1cf25af2f9526658ab63e3"
+  version = "v21.0.0"
+
+[[projects]]
+  digest = "1:a63cff6b5d8b95638bfe300385d93b2a6d9d687734b863da8e09dc834510a690"
+  name = "github.com/google/go-querystring"
+  packages = ["query"]
+  pruneopts = "NUT"
+  revision = "44c6ddd0a2342c386950e880b658017258da92fc"
+  version = "v1.0.0"
+
+[[projects]]
+  digest = "1:d0fbb40af7faf9cc62d1728be5fdd140ae17ce6e2aac6371971a0a6a2cc139d3"
+  name = "github.com/jessevdk/go-flags"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "c6ca198ec95c841fdb89fc0de7496fed11ab854e"
+  version = "v1.4.0"
+
+[[projects]]
+  digest = "1:a45ae66dea4c899d79fceb116accfa1892105c251f0dcd9a217ddc276b42ec68"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
+  version = "v1.1.2"
 
 [[projects]]
   branch = "master"
+  digest = "1:16bbae9910129be5a18b951eabacd54414d3faea094dfab92bb3c84884d46b11"
   name = "github.com/nu7hatch/gouuid"
   packages = ["."]
+  pruneopts = "NUT"
   revision = "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
 
 [[projects]]
   branch = "master"
+  digest = "1:13979d473f6b97aeadb4a882bf4c519324ced3975479e54686e08c3e9e50bc25"
   name = "github.com/pivotal-cf/paraphernalia"
   packages = ["secure/tlsconfig"]
-  revision = "e34e13867a42f12943d6d5448e90b294dc85601d"
+  pruneopts = "NUT"
+  revision = "a64ae2051c20c5cde13292a41db01029566134ba"
 
 [[projects]]
   branch = "master"
-  name = "github.com/pivotal-golang/clock"
-  packages = ["."]
-  revision = "2269160ae1757f96bbb8c6475e6fa36c805e73e0"
-
-[[projects]]
-  branch = "master"
+  digest = "1:d41dbefbd527b80f7885d522b26245cc74253158f228e2b40dec479fb2a2a2f0"
   name = "github.com/pivotal/go-smtpd"
   packages = ["smtpd"]
+  pruneopts = "NUT"
   revision = "0af6982457e5e683c4e238a1abf5dcd73b014504"
 
 [[projects]]
+  digest = "1:5cf3f025cbee5951a4ee961de067c8a89fc95a5adabead774f82822efabab121"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
+  digest = "1:86b2dcdf7c2c2a08f26ef47c8f96331f9f4ea4df15aa329e1bc0931c94914272"
+  name = "github.com/tedsuo/rata"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "0649c23705dfb45a9693b668c4fc1c0666f485d9"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "master"
+  digest = "1:082c538aa8ca5e086d5d20ec16417e7fca237de2c4146485e02aa09989d0ff38"
+  name = "golang.org/x/crypto"
+  packages = [
+    "curve25519",
+    "ed25519",
+    "ed25519/internal/edwards25519",
+    "internal/chacha20",
+    "internal/subtle",
+    "poly1305",
+    "ssh",
+  ]
+  pruneopts = "NUT"
+  revision = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
+
+[[projects]]
+  branch = "master"
+  digest = "1:0bf4ef4487aff40a47231aafea3d7c1b3bbe434d5c89f5ec444c137c495cbf95"
   name = "golang.org/x/net"
-  packages = ["html","html/atom","html/charset"]
-  revision = "66aacef3dd8a676686c7ae3716979581e8b03c47"
+  packages = [
+    "context",
+    "context/ctxhttp",
+    "html",
+    "html/atom",
+    "html/charset",
+    "internal/socks",
+    "proxy",
+  ]
+  pruneopts = "NUT"
+  revision = "927f97764cc334a6575f4b7a1584a147864d5723"
 
 [[projects]]
   branch = "master"
+  digest = "1:909616a132a79b36934f9a5eaa4f5caeaaadf06bc0080e6c748aebed83a2cd9e"
+  name = "golang.org/x/oauth2"
+  packages = [
+    ".",
+    "internal",
+  ]
+  pruneopts = "NUT"
+  revision = "d668ce993890a79bda886613ee587a69dd5da7a6"
+
+[[projects]]
+  branch = "master"
+  digest = "1:4744c63a704d401210ab6ec8f544be4d0843a864c303627cc322870db49979a7"
   name = "golang.org/x/sys"
-  packages = ["windows","windows/registry","windows/svc","windows/svc/mgr"]
-  revision = "a5054c7c1385fd50d9394475365355a87a7873ec"
+  packages = [
+    "windows",
+    "windows/registry",
+    "windows/svc",
+    "windows/svc/mgr",
+  ]
+  pruneopts = "NUT"
+  revision = "82a175fd1598e8a172e58ebdf5ed262bb29129e5"
 
 [[projects]]
-  branch = "master"
+  digest = "1:7c61a813b250ba8bb02bebb0382e6c3d00e04da2b577dc58985b86312fb89ffd"
   name = "golang.org/x/text"
-  packages = ["encoding","encoding/charmap","encoding/htmlindex","encoding/internal","encoding/internal/identifier","encoding/japanese","encoding/korean","encoding/simplifiedchinese","encoding/traditionalchinese","encoding/unicode","internal/gen","internal/tag","internal/utf8internal","language","runes","transform","unicode/cldr"]
-  revision = "bd91bbf73e9a4a801adbfb97133c992678533126"
+  packages = [
+    "encoding",
+    "encoding/charmap",
+    "encoding/htmlindex",
+    "encoding/internal",
+    "encoding/internal/identifier",
+    "encoding/japanese",
+    "encoding/korean",
+    "encoding/simplifiedchinese",
+    "encoding/traditionalchinese",
+    "encoding/unicode",
+    "internal/gen",
+    "internal/tag",
+    "internal/utf8internal",
+    "language",
+    "runes",
+    "transform",
+    "unicode/cldr",
+  ]
+  pruneopts = "NUT"
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
+
+[[projects]]
+  digest = "1:34c10243da5972105edd1b4b883e2bd918fbb3f73fbe14d6af6929e547173494"
+  name = "google.golang.org/appengine"
+  packages = [
+    "internal",
+    "internal/base",
+    "internal/datastore",
+    "internal/log",
+    "internal/remote_api",
+    "internal/urlfetch",
+    "urlfetch",
+  ]
+  pruneopts = "NUT"
+  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
+  version = "v1.4.0"
+
+[[projects]]
+  branch = "v1"
+  digest = "1:52ffb9db0286de37253a5098607cfbcfcdc94e51e8c226da120513df82adab0c"
+  name = "gopkg.in/yaml.v1"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "9f9df34309c04878acc86042b16630b0f696e1de"
 
 [[projects]]
   branch = "v2"
+  digest = "1:18108594151654e9e696b27b181b953f9a90b16bf14d253dd1b397b025a1487f"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+  pruneopts = "NUT"
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "727165da5681f79712a87bf9fd4c6030765a18ecfb0dc08ff6503bc3705c84bc"
+  input-imports = [
+    "github.com/cloudfoundry/bosh-utils/errors",
+    "github.com/cloudfoundry/bosh-utils/logger",
+    "github.com/cloudfoundry/bosh-utils/system",
+    "github.com/concourse/atc",
+    "github.com/cppforlife/bosh-provisioner/downloader",
+    "github.com/cppforlife/bosh-provisioner/release",
+    "github.com/cppforlife/bosh-provisioner/release/job",
+    "github.com/cppforlife/bosh-provisioner/tar",
+    "github.com/cppforlife/go-semi-semantic/version",
+    "github.com/google/go-github/github",
+    "github.com/nu7hatch/gouuid",
+    "github.com/pkg/errors",
+    "golang.org/x/oauth2",
+    "gopkg.in/yaml.v1",
+    "gopkg.in/yaml.v2",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

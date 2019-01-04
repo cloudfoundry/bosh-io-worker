@@ -6,14 +6,17 @@ import (
 	"strconv"
 	"strings"
 
+	"code.cloudfoundry.org/clock"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	boshretry "github.com/cloudfoundry/bosh-utils/retrystrategy"
 	boshsys "github.com/cloudfoundry/bosh-utils/system"
-	"github.com/pivotal-golang/clock"
 )
 
-const partitionNamePrefix = "bosh-partition"
+const (
+	partitionNamePrefix = "bosh-partition"
+	deltaSize           = 100
+)
 
 type partedPartitioner struct {
 	logger      boshlog.Logger
@@ -87,7 +90,7 @@ func (p partedPartitioner) partitionsMatch(existingPartitions []existingPartitio
 		existingPartition := existingPartitions[index]
 		if existingPartition.Type != partition.Type {
 			return false
-		} else if !withinDelta(partition.SizeInBytes, existingPartition.SizeInBytes, p.convertFromMbToBytes(20)) {
+		} else if !withinDelta(partition.SizeInBytes, existingPartition.SizeInBytes, p.convertFromMbToBytes(deltaSize)) {
 			return false
 		}
 
@@ -194,10 +197,17 @@ func (p partedPartitioner) convertFromKbToBytes(sizeInKb uint64) uint64 {
 func (p partedPartitioner) runPartedPrint(devicePath string) (stdout, stderr string, exitStatus int, err error) {
 	stdout, stderr, exitStatus, err = p.cmdRunner.RunCommand("parted", "-m", devicePath, "unit", "B", "print")
 
-	// If the error is not having a partition table, create one
-	if strings.Contains(fmt.Sprintf("%s\n%s", stdout, stderr), "unrecognised disk label") {
-		stdout, stderr, exitStatus, err = p.getPartitionTable(devicePath)
+	defer p.cmdRunner.RunCommand("udevadm", "settle")
 
+	printFields := strings.SplitN(string(stdout), ":", 7)
+
+	// Create a new partition table if
+	// - there is none, or
+	// - a "loop" partition table is shown (which can mean a valid one was not found)
+	if strings.Contains(fmt.Sprintf("%s\n%s", stdout, stderr), "unrecognised disk label") ||
+		(len(printFields) > 5 && printFields[5] == "loop") {
+
+		stdout, stderr, exitStatus, err = p.getPartitionTable(devicePath)
 		if err != nil {
 			return stdout, stderr, exitStatus, bosherr.WrapErrorf(err, "Parted making label")
 		}
@@ -275,6 +285,15 @@ func (p partedPartitioner) createEachPartition(partitions []Partition, deviceFul
 				//TODO: double check the output here. Does it make sense?
 				return true, bosherr.WrapError(err, "Creating partition using parted")
 			}
+
+			_, _, _, err = p.cmdRunner.RunCommand("partprobe", devicePath)
+			if err != nil {
+				p.logger.Error(p.logTag, "Failed to probe for newly created parition: %s", err)
+				return true, bosherr.WrapError(err, "Creating partition using parted")
+			}
+
+			p.cmdRunner.RunCommand("udevadm", "settle")
+
 			p.logger.Info(p.logTag, "Successfully created partition %d on %s", index, devicePath)
 			return false, nil
 		})
@@ -295,6 +314,11 @@ func (p partedPartitioner) createMapperPartition(devicePath string) error {
 	_, _, _, err := p.cmdRunner.RunCommand("/etc/init.d/open-iscsi", "restart")
 	if err != nil {
 		return bosherr.WrapError(err, "Shelling out to restart open-iscsi")
+	}
+
+	_, _, _, err = p.cmdRunner.RunCommand("/etc/init.d/multipath-tools", "restart")
+	if err != nil {
+		return bosherr.WrapError(err, "Restarting multipath after restarting open-iscsi")
 	}
 
 	detectPartitionRetryable := boshretry.NewRetryable(func() (bool, error) {

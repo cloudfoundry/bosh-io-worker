@@ -24,6 +24,9 @@ type AuditLoggerProvider interface {
 	ProvideErrorLogger() (*log.Logger, error)
 }
 
+//go:generate counterfeiter . Platform
+//go:generate counterfeiter . AuditLogger
+
 type Platform interface {
 	GetFs() boshsys.FileSystem
 	GetRunner() boshsys.CmdRunner
@@ -50,7 +53,8 @@ type Platform interface {
 	SetTimeWithNtpServers(servers []string) (err error)
 	SetupEphemeralDiskWithPath(devicePath string, desiredSwapSizeInBytes *uint64) (err error)
 	SetupRawEphemeralDisks(devices []boshsettings.DiskSettings) (err error)
-	SetupDataDir() (err error)
+	SetupDataDir(boshsettings.JobDir) (err error)
+	SetupSharedMemory() (err error)
 	SetupTmpDir() (err error)
 	SetupHomeDir() (err error)
 	SetupBlobsDir() (err error)
@@ -90,4 +94,6 @@ type Platform interface {
 
 	RemoveDevTools(packageFileListPath string) error
 	RemoveStaticLibraries(packageFileListPath string) error
+
+	Shutdown() error
 }

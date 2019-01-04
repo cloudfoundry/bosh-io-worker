@@ -3,13 +3,13 @@ package action
 import (
 	boshappl "github.com/cloudfoundry/bosh-agent/agent/applier"
 	boshas "github.com/cloudfoundry/bosh-agent/agent/applier/applyspec"
+	boshagentblob "github.com/cloudfoundry/bosh-agent/agent/blobstore"
 	boshcomp "github.com/cloudfoundry/bosh-agent/agent/compiler"
 	boshscript "github.com/cloudfoundry/bosh-agent/agent/script"
 	boshtask "github.com/cloudfoundry/bosh-agent/agent/task"
 	boshjobsuper "github.com/cloudfoundry/bosh-agent/jobsupervisor"
 	boshnotif "github.com/cloudfoundry/bosh-agent/notification"
 	boshplatform "github.com/cloudfoundry/bosh-agent/platform"
-	boshntp "github.com/cloudfoundry/bosh-agent/platform/ntp"
 	boshsettings "github.com/cloudfoundry/bosh-agent/settings"
 	boshblob "github.com/cloudfoundry/bosh-utils/blobstore"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
@@ -24,7 +24,7 @@ func NewFactory(
 	settingsService boshsettings.Service,
 	platform boshplatform.Platform,
 	blobstore boshblob.DigestBlobstore,
-	blobManager boshblob.BlobManagerInterface,
+	sensitiveBlobManager boshagentblob.BlobManagerInterface,
 	taskService boshtask.Service,
 	notifier boshnotif.Notifier,
 	applier boshappl.Applier,
@@ -39,7 +39,6 @@ func NewFactory(
 	dirProvider := platform.GetDirProvider()
 	vitalsService := platform.GetVitalsService()
 	certManager := platform.GetCertManager()
-	ntpService := boshntp.NewConcreteService(platform.GetFs(), dirProvider)
 
 	factory = concreteFactory{
 		availableActions: map[string]Action{
@@ -55,37 +54,34 @@ func NewFactory(
 			"ssh":             NewSSH(settingsService, platform, dirProvider, logger),
 			"fetch_logs":      NewFetchLogs(compressor, copier, blobstore, dirProvider),
 			"update_settings": NewUpdateSettings(settingsService, platform, certManager, logger),
+			"shutdown":        NewShutdown(platform),
 
 			// Job management
 			"prepare":    NewPrepare(applier),
-			"apply":      NewApply(applier, specService, settingsService, dirProvider.InstanceDir(), platform.GetFs()),
+			"apply":      NewApply(applier, specService, settingsService, dirProvider, platform.GetFs()),
 			"start":      NewStart(jobSupervisor, applier, specService),
 			"stop":       NewStop(jobSupervisor),
 			"drain":      NewDrain(notifier, specService, jobScriptProvider, jobSupervisor, logger),
-			"get_state":  NewGetState(settingsService, specService, jobSupervisor, vitalsService, ntpService),
+			"get_state":  NewGetState(settingsService, specService, jobSupervisor, vitalsService),
 			"run_errand": NewRunErrand(specService, dirProvider.JobsDir(), platform.GetRunner(), logger),
 			"run_script": NewRunScript(jobScriptProvider, specService, logger),
 
 			// Compilation
-			"compile_package":    NewCompilePackage(compiler),
-			"release_apply_spec": NewReleaseApplySpec(platform),
+			"compile_package": NewCompilePackage(compiler),
 
 			// Rendered Templates
-			"upload_blob": NewUploadBlobAction(blobManager),
+			"upload_blob": NewUploadBlobAction(sensitiveBlobManager),
 
 			// Disk management
-			"list_disk":    NewListDisk(settingsService, platform, logger),
-			"migrate_disk": NewMigrateDisk(platform, dirProvider),
-			"mount_disk":   NewMountDisk(settingsService, platform, dirProvider, logger),
-			"unmount_disk": NewUnmountDisk(settingsService, platform),
+			"list_disk":              NewListDisk(settingsService, platform, logger),
+			"migrate_disk":           NewMigrateDisk(platform, dirProvider),
+			"mount_disk":             NewMountDisk(settingsService, platform, dirProvider, logger),
+			"unmount_disk":           NewUnmountDisk(settingsService, platform),
+			"add_persistent_disk":    NewAddPersistentDiskAction(settingsService),
+			"remove_persistent_disk": NewRemovePersistentDiskAction(settingsService),
 
 			// ARP cache management
 			"delete_arp_entries": NewDeleteARPEntries(platform),
-
-			// Networking
-			"prepare_network_change":     NewPrepareNetworkChange(platform.GetFs(), settingsService, NewAgentKiller()),
-			"prepare_configure_networks": NewPrepareConfigureNetworks(platform, settingsService),
-			"configure_networks":         NewConfigureNetworks(NewAgentKiller()),
 
 			// DNS
 			"sync_dns": NewSyncDNS(blobstore, settingsService, platform, logger),

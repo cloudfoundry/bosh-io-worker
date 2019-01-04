@@ -72,8 +72,6 @@ func (c concreteCompiler) Compile(pkg Package, deps []boshmodels.Package) (blobI
 		return "", nil, bosherr.WrapErrorf(err, "Fetching package %s", pkg.Name)
 	}
 
-	defer c.fs.RemoveAll(compilePath)
-
 	defer func() {
 		e := c.fs.RemoveAll(compilePath)
 		if e != nil && err == nil {
@@ -91,12 +89,12 @@ func (c concreteCompiler) Compile(pkg Package, deps []boshmodels.Package) (blobI
 		return "", nil, bosherr.WrapError(err, "Getting bundle for new package")
 	}
 
-	_, installPath, err := compiledPkgBundle.InstallWithoutContents()
+	installPath, err := compiledPkgBundle.InstallWithoutContents()
 	if err != nil {
 		return "", nil, bosherr.WrapError(err, "Setting up new package bundle")
 	}
 
-	_, enablePath, err := compiledPkgBundle.Enable()
+	enablePath, err := compiledPkgBundle.Enable()
 	if err != nil {
 		return "", nil, bosherr.WrapError(err, "Enabling new package bundle")
 	}

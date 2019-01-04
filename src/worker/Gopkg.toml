@@ -28,3 +28,12 @@
 [[constraint]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
+
+[[override]]
+  version = "2.23.0"
+  name = "github.com/cloudfoundry/bosh-agent"
+
+[prune]
+  unused-packages = true
+  non-go = true
+  go-tests = true

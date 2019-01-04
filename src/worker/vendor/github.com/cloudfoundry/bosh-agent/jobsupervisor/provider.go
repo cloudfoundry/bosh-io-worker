@@ -5,7 +5,7 @@ package jobsupervisor
 import (
 	"time"
 
-	"github.com/pivotal-golang/clock"
+	"code.cloudfoundry.org/clock"
 
 	boshhandler "github.com/cloudfoundry/bosh-agent/handler"
 	boshmonit "github.com/cloudfoundry/bosh-agent/jobsupervisor/monit"
@@ -40,8 +40,8 @@ func NewProvider(
 		jobSupervisorListenPort,
 		MonitReloadOptions{
 			MaxTries:               3,
-			MaxCheckTries:          6,
-			DelayBetweenCheckTries: 5 * time.Second,
+			MaxCheckTries:          10,
+			DelayBetweenCheckTries: 1 * time.Second,
 		},
 		timeService,
 	)
