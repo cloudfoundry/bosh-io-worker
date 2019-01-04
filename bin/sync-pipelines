@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -eu
+
+sanity_pipeline=bosh-io-team-check
+releases_index=../releases/index.yml
+
+
+echo "Verifying bosh-io team..."
+fly -t production pipelines | grep $sanity_pipeline
+
+
+echo
+echo "Pulling latest releases/index.yml..."
+pushd "$( dirname "$releases_index" )" >/dev/null
+  git pull --ff-only
+popd >/dev/null
+
+
+echo
+echo "Synchronizing pipelines..."
+
+while read org; do
+  echo "$org..."
+
+  fly -t production set-pipeline -n \
+    -p "releases:$org" \
+    -c <( go run ./src/worker/main/generatepipeline/main.go "$releases_index" "$org" ) \
+    -l ../secrets
+
+done < <( set -eu
+  ( set -eu
+
+    # existing orgs
+    fly -t production pipelines | grep releases | awk '{ print $1 }' | cut -c10- ;
+    # expected orgs
+    go run ./src/worker/main/indexorgs/main.go "$releases_index"
+  ) | sort | uniq
+)
+
+
+echo
+echo "Done"
