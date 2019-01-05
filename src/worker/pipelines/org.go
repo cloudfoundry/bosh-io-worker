@@ -165,8 +165,8 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 								fmt.Sprintf(
 									`
 set -eu
-wget -O /usr/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.48-linux-amd64
-echo "c807f1938494f4280d65ebbdc863eda3f883d72e  /usr/bin/bosh" | shasum -c -
+wget -O /usr/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-5.4.0-linux-amd64
+echo "ecc1b6464adf9a0ede464b8699525a473e05e7205357e4eb198599edf1064f57  /usr/bin/bosh" | sha256sum -c -
 chmod +x /usr/bin/bosh
 wget -O /usr/bin/meta4 https://s3.amazonaws.com/dk-shared-assets/meta4-0.1.0-linux-amd64
 echo "235bc60706793977446529830c2cb319e6aaf2da  /usr/bin/meta4" | shasum -c -
