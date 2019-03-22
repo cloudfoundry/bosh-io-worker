@@ -5,11 +5,10 @@ Currently implemented via Concourse pipelines.
 ## Usage
 
 ```
-$ fly login -t production -n bosh-io
+$ fly -t bosh-io login -c https://main.bosh-ci.cf-app.com -n bosh-io
 $ source .envrc
-$ cd src/worker
-$ lpass show bosh-io-pipelines-reconfigure-secrets --notes > ../../../secrets
-$ go run sync-pipelines.go <(cat ~/workspace/src/github.com/bosh-io/releases/index.yml) ../../pipelines/release-tpl.yml ../../../secrets
+$ lpass login <your accoutn>
+$ ./bin/sync-pipelines
 ```
 
 ## Notes

@@ -7,7 +7,8 @@ releases_index=../releases/index.yml
 
 
 echo "Verifying bosh-io team..."
-fly -t production pipelines | grep $sanity_pipeline
+echo "If this fails run: fly -t bosh-io login -c https://main.bosh-ci.cf-app.com -n bosh-io"
+fly -t bosh-io pipelines | grep $sanity_pipeline
 
 
 echo
@@ -23,16 +24,16 @@ echo "Synchronizing pipelines..."
 while read org; do
   echo "$org..."
 
-  fly -t production set-pipeline -n \
+  fly -t bosh-io set-pipeline -n \
     -p "releases:$org" \
     -c <( go run ./src/worker/main/generatepipeline/main.go "$releases_index" "$org" ) \
-    -l ../secrets
+    -l <( lpass show bosh-io-pipelines-reconfigure-secrets --notes )
 
 done < <( set -eu
   ( set -eu
 
     # existing orgs
-    fly -t production pipelines | grep releases | awk '{ print $1 }' | cut -c10- ;
+    fly -t bosh-io pipelines | grep releases | awk '{ print $1 }' | cut -c10- ;
     # expected orgs
     go run ./src/worker/main/indexorgs/main.go "$releases_index"
   ) | sort | uniq
