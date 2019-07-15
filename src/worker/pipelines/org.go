@@ -7,7 +7,7 @@ import (
 
 	"worker/releases"
 
-	"github.com/concourse/atc"
+	"github.com/concourse/concourse/atc"
 	yaml "gopkg.in/yaml.v1"
 )
 
@@ -109,20 +109,22 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 			Serial: true,
 			Plan: atc.PlanSequence{
 				atc.PlanConfig{
-					Aggregate: &atc.PlanSequence{
-						atc.PlanConfig{
-							Get: "worker",
-						},
-						atc.PlanConfig{
-							Get:      "release",
-							Resource: repoResourceName,
-							Trigger:  true,
-							Params: atc.Params{
-								"submodules": "none",
+					InParallel: &atc.InParallelConfig{
+						Steps: atc.PlanSequence{
+							atc.PlanConfig{
+								Get: "worker",
 							},
-						},
-						atc.PlanConfig{
-							Get: "releases-index",
+							atc.PlanConfig{
+								Get:      "release",
+								Resource: repoResourceName,
+								Trigger:  true,
+								Params: atc.Params{
+									"submodules": "none",
+								},
+							},
+							atc.PlanConfig{
+								Get: "releases-index",
+							},
 						},
 					},
 				},

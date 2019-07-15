@@ -188,6 +188,28 @@ func (p WindowsPlatform) SetupRootDisk(ephemeralDiskPath string) (err error) {
 	return
 }
 
+func (p WindowsPlatform) SetupCanRestartDir() error {
+	return nil
+}
+
+func (p WindowsPlatform) SetupBoshSettingsDisk() error {
+	return nil
+}
+
+func (p WindowsPlatform) GetAgentSettingsPath(tmpfs bool) string {
+	if tmpfs {
+		p.logger.Info("WindowsPlatform", "Windows does not support using tmpfs, using default agent settings path")
+	}
+	return filepath.Join(p.dirProvider.BoshDir(), "settings.json")
+}
+
+func (p WindowsPlatform) GetPersistentDiskSettingsPath(tmpfs bool) string {
+	if tmpfs {
+		p.logger.Info("WindowsPlatform", "Windows does not support using tmpfs, using default persistent disk settings path")
+	}
+	return filepath.Join(p.dirProvider.BoshDir(), "persistent_disk_hints.json")
+}
+
 func (p WindowsPlatform) SetupSSH(publicKey []string, username string) error {
 
 	homedir, err := userHomeDirectory(username)
@@ -338,7 +360,7 @@ func (p WindowsPlatform) SetTimeWithNtpServers(servers []string) (err error) {
 	return
 }
 
-func (p WindowsPlatform) SetupEphemeralDiskWithPath(devicePath string, desiredSwapSizeInBytes *uint64) error {
+func (p WindowsPlatform) SetupEphemeralDiskWithPath(devicePath string, desiredSwapSizeInBytes *uint64, labelPrefix string) error {
 	const minimumDiskSizeToPartition = 1024 * 1024
 
 	if devicePath == "" || !p.options.Windows.EnableEphemeralDiskMounting {

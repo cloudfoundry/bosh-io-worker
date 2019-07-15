@@ -18,6 +18,10 @@ func (p Provider) BoshDir() string {
 	return filepath.Join(p.BaseDir(), "bosh")
 }
 
+func (p Provider) BoshSettingsDir() string {
+	return filepath.Join(p.BaseDir(), "bosh", "settings")
+}
+
 func (p Provider) BoshBinDir() string {
 	return filepath.Join(p.BoshDir(), "bin")
 }
@@ -84,6 +88,10 @@ func (p Provider) SettingsDir() string {
 
 func (p Provider) TmpDir() string {
 	return filepath.Join(p.DataDir(), "tmp")
+}
+
+func (p Provider) CanRestartDir() string {
+	return filepath.Join(p.BoshDir(), "canrestart")
 }
 
 func (p Provider) LogsDir() string {
