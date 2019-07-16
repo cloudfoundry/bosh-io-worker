@@ -9,8 +9,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	bprel "github.com/cppforlife/bosh-provisioner/release"
-	bpreljob "github.com/cppforlife/bosh-provisioner/release/job"
+	bprel "github.com/bosh-dep-forks/bosh-provisioner/release"
+	bpreljob "github.com/bosh-dep-forks/bosh-provisioner/release/job"
 	semver "github.com/cppforlife/go-semi-semantic/version"
 )
 
