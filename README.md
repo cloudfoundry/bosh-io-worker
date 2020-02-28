@@ -4,9 +4,18 @@ Currently implemented via Concourse pipelines.
 
 ## Usage
 
+git clone `worker` and `releases` to the same parent directory
+
+note: `bin/test` will report `go vet` warnings because several `main` functions
+are defined in the same package
+
 ```
 $ fly -t bosh-io login -c https://main.bosh-ci.cf-app.com -n bosh-io
 $ source .envrc
+$ go get github.com/pkg/errors
+$ pushd src/worker
+$ dep ensure
+$ popd
 $ lpass login <your accoutn>
 $ ./bin/sync-pipelines
 ```
