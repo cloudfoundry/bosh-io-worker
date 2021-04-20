@@ -1,6 +1,5 @@
 # worker
-
-Currently implemented via Concourse pipelines.
+Deploys a set of Concourse pipelines to build releases for bosh.io. Follow usage instructions below to update release pipelines. These script will looks at the [releases repo](https://github.com/bosh-io/releases) to build pipelines by github org.
 
 ## Usage
 
