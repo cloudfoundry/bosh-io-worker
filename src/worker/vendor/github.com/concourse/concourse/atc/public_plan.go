@@ -4,14 +4,18 @@ import "encoding/json"
 
 func (plan Plan) Public() *json.RawMessage {
 	var public struct {
-		ID PlanID `json:"id"`
+		ID PlanID `json:"id,omitempty"`
 
-		Aggregate      *json.RawMessage `json:"aggregate,omitempty"`
 		InParallel     *json.RawMessage `json:"in_parallel,omitempty"`
+		Across         *json.RawMessage `json:"across,omitempty"`
 		Do             *json.RawMessage `json:"do,omitempty"`
 		Get            *json.RawMessage `json:"get,omitempty"`
 		Put            *json.RawMessage `json:"put,omitempty"`
+		Check          *json.RawMessage `json:"check,omitempty"`
 		Task           *json.RawMessage `json:"task,omitempty"`
+		Run            *json.RawMessage `json:"run,omitempty"`
+		SetPipeline    *json.RawMessage `json:"set_pipeline,omitempty"`
+		LoadVar        *json.RawMessage `json:"load_var,omitempty"`
 		OnAbort        *json.RawMessage `json:"on_abort,omitempty"`
 		OnError        *json.RawMessage `json:"on_error,omitempty"`
 		Ensure         *json.RawMessage `json:"ensure,omitempty"`
@@ -27,12 +31,12 @@ func (plan Plan) Public() *json.RawMessage {
 
 	public.ID = plan.ID
 
-	if plan.Aggregate != nil {
-		public.Aggregate = plan.Aggregate.Public()
-	}
-
 	if plan.InParallel != nil {
 		public.InParallel = plan.InParallel.Public()
+	}
+
+	if plan.Across != nil {
+		public.Across = plan.Across.Public()
 	}
 
 	if plan.Do != nil {
@@ -47,8 +51,24 @@ func (plan Plan) Public() *json.RawMessage {
 		public.Put = plan.Put.Public()
 	}
 
+	if plan.Check != nil {
+		public.Check = plan.Check.Public()
+	}
+
 	if plan.Task != nil {
 		public.Task = plan.Task.Public()
+	}
+
+	if plan.Run != nil {
+		public.Run = plan.Run.Public()
+	}
+
+	if plan.SetPipeline != nil {
+		public.SetPipeline = plan.SetPipeline.Public()
+	}
+
+	if plan.LoadVar != nil {
+		public.LoadVar = plan.LoadVar.Public()
 	}
 
 	if plan.OnAbort != nil {
@@ -98,16 +118,6 @@ func (plan Plan) Public() *json.RawMessage {
 	return enc(public)
 }
 
-func (plan AggregatePlan) Public() *json.RawMessage {
-	public := make([]*json.RawMessage, len(plan))
-
-	for i := 0; i < len(plan); i++ {
-		public[i] = plan[i].Public()
-	}
-
-	return enc(public)
-}
-
 func (plan InParallelPlan) Public() *json.RawMessage {
 	steps := make([]*json.RawMessage, len(plan.Steps))
 
@@ -122,6 +132,27 @@ func (plan InParallelPlan) Public() *json.RawMessage {
 	}{
 		Steps:    steps,
 		Limit:    plan.Limit,
+		FailFast: plan.FailFast,
+	})
+}
+
+func (plan AcrossPlan) Public() *json.RawMessage {
+	type acrossVar struct {
+		Name string `json:"name"`
+	}
+
+	vars := make([]acrossVar, len(plan.Vars))
+	for i, v := range plan.Vars {
+		vars[i] = acrossVar{
+			Name: v.Var,
+		}
+	}
+
+	return enc(struct {
+		Vars     []acrossVar `json:"vars"`
+		FailFast bool        `json:"fail_fast,omitempty"`
+	}{
+		Vars:     vars,
 		FailFast: plan.FailFast,
 	})
 }
@@ -148,9 +179,9 @@ func (plan EnsurePlan) Public() *json.RawMessage {
 
 func (plan GetPlan) Public() *json.RawMessage {
 	return enc(struct {
+		Name     string   `json:"name"`
 		Type     string   `json:"type"`
-		Name     string   `json:"name,omitempty"`
-		Resource string   `json:"resource"`
+		Resource string   `json:"resource,omitempty"`
 		Version  *Version `json:"version,omitempty"`
 	}{
 		Type:     plan.Type,
@@ -162,8 +193,8 @@ func (plan GetPlan) Public() *json.RawMessage {
 
 func (plan DependentGetPlan) Public() *json.RawMessage {
 	return enc(struct {
+		Name     string `json:"name"`
 		Type     string `json:"type"`
-		Name     string `json:"name,omitempty"`
 		Resource string `json:"resource"`
 	}{
 		Type:     plan.Type,
@@ -214,13 +245,23 @@ func (plan OnSuccessPlan) Public() *json.RawMessage {
 
 func (plan PutPlan) Public() *json.RawMessage {
 	return enc(struct {
+		Name     string `json:"name"`
 		Type     string `json:"type"`
-		Name     string `json:"name,omitempty"`
-		Resource string `json:"resource"`
+		Resource string `json:"resource,omitempty"`
 	}{
 		Type:     plan.Type,
 		Name:     plan.Name,
 		Resource: plan.Resource,
+	})
+}
+
+func (plan CheckPlan) Public() *json.RawMessage {
+	return enc(struct {
+		Name string `json:"name"`
+		Type string `json:"type"`
+	}{
+		Type: plan.Type,
+		Name: plan.Name,
 	})
 }
 
@@ -231,6 +272,38 @@ func (plan TaskPlan) Public() *json.RawMessage {
 	}{
 		Name:       plan.Name,
 		Privileged: plan.Privileged,
+	})
+}
+
+func (plan RunPlan) Public() *json.RawMessage {
+	return enc(struct {
+		Message    string `json:"message"`
+		Type       string `json:"type"`
+		Privileged bool   `json:"privileged"`
+	}{
+		Message:    plan.Message,
+		Type:       plan.Type,
+		Privileged: plan.Privileged,
+	})
+}
+
+func (plan SetPipelinePlan) Public() *json.RawMessage {
+	return enc(struct {
+		Name         string       `json:"name"`
+		Team         string       `json:"team"`
+		InstanceVars InstanceVars `json:"instance_vars"`
+	}{
+		Name:         plan.Name,
+		Team:         plan.Team,
+		InstanceVars: plan.InstanceVars,
+	})
+}
+
+func (plan LoadVarPlan) Public() *json.RawMessage {
+	return enc(struct {
+		Name string `json:"name"`
+	}{
+		Name: plan.Name,
 	})
 }
 
@@ -268,6 +341,16 @@ func (plan ArtifactInputPlan) Public() *json.RawMessage {
 
 func (plan ArtifactOutputPlan) Public() *json.RawMessage {
 	return enc(plan)
+}
+
+func (plan VarScopedPlan) Public() *json.RawMessage {
+	return enc(struct {
+		Step   *json.RawMessage `json:"step"`
+		Values []interface{}    `json:"values"`
+	}{
+		Step:   plan.Step.Public(),
+		Values: plan.Values,
+	})
 }
 
 func enc(public interface{}) *json.RawMessage {

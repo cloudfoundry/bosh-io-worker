@@ -7,7 +7,7 @@ import (
 
 	semver "github.com/cppforlife/go-semi-semantic/version"
 
-	. "worker/misc"
+	. "github.com/bosh-io/worker/src/worker/misc"
 )
 
 func main() {

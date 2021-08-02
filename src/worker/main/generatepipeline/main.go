@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/bosh-io/worker/src/worker/pipelines"
+	"github.com/bosh-io/worker/src/worker/releases"
 	"log"
 	"os"
-
-	"worker/pipelines"
-	"worker/releases"
 )
 
 func main() {

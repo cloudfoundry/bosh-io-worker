@@ -1,14 +1,14 @@
 package pipelines
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
-	"worker/releases"
-
+	"github.com/bosh-io/worker/src/worker/releases"
 	"github.com/concourse/concourse/atc"
-	yaml "gopkg.in/yaml.v1"
 )
 
 type OrgPipeline struct {
@@ -52,7 +52,7 @@ func (o *OrgPipeline) Name() string {
 }
 
 func (o *OrgPipeline) PipelineBytes() []byte {
-	pipelineBytes, err := yaml.Marshal(o.pipeline)
+	pipelineBytes, err := json.Marshal(o.pipeline)
 	if err != nil {
 		log.Panicf("marshaling pipeline: %v", err)
 	}
@@ -84,6 +84,7 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 	name := r.GitHubRepo()
 	repoResourceName := fmt.Sprintf("%s-repo", name)
 	minVersion := "0"
+	fiveMinuteDuration, _ := time.ParseDuration("5m")
 
 	if r.MinVersion != "" {
 		minVersion = r.MinVersion
@@ -94,7 +95,7 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 		atc.ResourceConfig{
 			Name:       repoResourceName,
 			Type:       "git",
-			CheckEvery: "5m",
+			CheckEvery: &atc.CheckEvery{Interval: fiveMinuteDuration},
 			Source: atc.Source{
 				"uri":             string(r.URL),
 				"disable_ci_skip": true,
@@ -107,65 +108,84 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 		atc.JobConfig{
 			Name:   name,
 			Serial: true,
-			Plan: atc.PlanSequence{
-				atc.PlanConfig{
-					InParallel: &atc.InParallelConfig{
-						Steps: atc.PlanSequence{
-							atc.PlanConfig{
-								Get: "worker",
-							},
-							atc.PlanConfig{
-								Get:      "release",
-								Resource: repoResourceName,
-								Trigger:  true,
-								Params: atc.Params{
-									"submodules": "none",
+			PlanSequence: []atc.Step{
+				{
+					Config: &atc.InParallelStep{
+						Config: atc.InParallelConfig{
+							Steps: []atc.Step{
+								{
+									Config: &atc.GetStep{
+										Name: "worker",
+									},
 								},
-							},
-							atc.PlanConfig{
-								Get: "releases-index",
+								{
+									Config: &atc.GetStep{
+										Name:     "release",
+										Resource: repoResourceName,
+										Trigger:  true,
+										Params: atc.Params{
+											"submodules": "none",
+										},
+									},
+								},
+								{
+									Config: &atc.GetStep{
+										Name: "releases-index",
+									},
+								},
 							},
 						},
 					},
 				},
-				atc.PlanConfig{
-					Task: "sync",
-					Params: atc.Params{
-						"AWS_ACCESS_KEY_ID":     "((s3_access_key_id))",
-						"AWS_SECRET_ACCESS_KEY": "((s3_secret_access_key))",
-					},
-					TaskConfig: &atc.TaskConfig{
-						Platform: "linux",
-						ImageResource: &atc.ImageResource{
-							Type: "docker-image",
-							Source: atc.Source{
-								"repository": "golang",
-								"tag":        "1.11",
-							},
-						},
-						Inputs: []atc.TaskInputConfig{
-							atc.TaskInputConfig{
-								Name: "release",
-							},
-							atc.TaskInputConfig{
+				{
+					Config: &atc.EnsureStep{
+						Hook: atc.Step{
+							Config: &atc.PutStep{
 								Name: "releases-index",
-								Path: "releases-index-input",
-							},
-							atc.TaskInputConfig{
-								Name: "worker",
-							},
-						},
-						Outputs: []atc.TaskOutputConfig{
-							atc.TaskOutputConfig{
-								Name: "releases-index",
+								Params: atc.Params{
+									"repository": "releases-index",
+									"rebase":     true,
+								},
 							},
 						},
-						Run: atc.TaskRunConfig{
-							Path: "bash",
-							Args: []string{
-								"-c",
-								fmt.Sprintf(
-									`
+						Step: &atc.TaskStep{
+							Name: "sync",
+							Params: atc.TaskEnv{
+								"AWS_ACCESS_KEY_ID":     "((s3_access_key_id))",
+								"AWS_SECRET_ACCESS_KEY": "((s3_secret_access_key))",
+							},
+							Config: &atc.TaskConfig{
+								Platform: "linux",
+								ImageResource: &atc.ImageResource{
+									Type: "docker-image",
+									Source: atc.Source{
+										"repository": "golang",
+										"tag":        "1.11",
+									},
+								},
+								Inputs: []atc.TaskInputConfig{
+									atc.TaskInputConfig{
+										Name: "release",
+									},
+									atc.TaskInputConfig{
+										Name: "releases-index",
+										Path: "releases-index-input",
+									},
+									atc.TaskInputConfig{
+										Name: "worker",
+									},
+								},
+								Outputs: []atc.TaskOutputConfig{
+									atc.TaskOutputConfig{
+										Name: "releases-index",
+									},
+								},
+								Run: atc.TaskRunConfig{
+									Path: "bash",
+									Args: []string{
+										"-c",
+										fmt.Sprintf(
+											`
 set -eu
 wget -O /usr/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-5.4.0-linux-amd64
 echo "ecc1b6464adf9a0ede464b8699525a473e05e7205357e4eb198599edf1064f57  /usr/bin/bosh" | sha256sum -c -
@@ -179,17 +199,12 @@ export GOPATH=$taskdir/worker
 cd $GOPATH/src/worker
 go run create-releases.go "$taskdir/release" "$taskdir/releases-index/%s" "%s" "((s3_endpoint))"
 `,
-									strings.TrimPrefix(string(r.URL), "https://"),
-									minVersion,
-								),
+											strings.TrimPrefix(string(r.URL), "https://"),
+											minVersion,
+										),
+									},
+								},
 							},
-						},
-					},
-					Ensure: &atc.PlanConfig{
-						Put: "releases-index",
-						Params: atc.Params{
-							"repository": "releases-index",
-							"rebase":     true,
 						},
 					},
 				},
