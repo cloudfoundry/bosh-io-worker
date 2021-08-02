@@ -160,7 +160,7 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 									Type: "docker-image",
 									Source: atc.Source{
 										"repository": "golang",
-										"tag":        "1.11",
+										"tag":        "1.16",
 									},
 								},
 								Inputs: []atc.TaskInputConfig{
@@ -169,7 +169,6 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 									},
 									atc.TaskInputConfig{
 										Name: "releases-index",
-										Path: "releases-index-input",
 									},
 									atc.TaskInputConfig{
 										Name: "worker",
@@ -194,9 +193,7 @@ wget -O /usr/bin/meta4 https://s3.amazonaws.com/dk-shared-assets/meta4-0.1.0-lin
 echo "235bc60706793977446529830c2cb319e6aaf2da  /usr/bin/meta4" | shasum -c -
 chmod +x /usr/bin/meta4
 taskdir=$PWD
-git clone releases-index-input releases-index
-export GOPATH=$taskdir/worker
-cd $GOPATH/src/worker
+cd worker/src/worker
 go run create-releases.go "$taskdir/release" "$taskdir/releases-index/%s" "%s" "((s3_endpoint))"
 `,
 											strings.TrimPrefix(string(r.URL), "https://"),
