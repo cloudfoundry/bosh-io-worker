@@ -31,10 +31,10 @@ pushd ./src/worker >/dev/null
 
     fly -t bosh-io set-pipeline -n \
       -p "releases-${lowerOrg}" \
-      -c <( go run main/generatepipeline/main.go "$releases_index" "$org" ) \
+      -c <( go run -mod=vendor main/generatepipeline/main.go "$releases_index" "$org" ) \
       -l <( lpass show bosh-io-pipelines-reconfigure-secrets --notes )
   done < <( set -eu
-    go run main/indexorgs/main.go "$releases_index"
+    go run -mod=vendor main/indexorgs/main.go "$releases_index"
   )
 popd >/dev/null
 
