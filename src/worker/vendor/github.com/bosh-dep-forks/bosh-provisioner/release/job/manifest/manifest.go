@@ -2,9 +2,9 @@
 package manifest
 
 import (
-	"github.com/cloudfoundry-incubator/candiedyaml"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshsys "github.com/cloudfoundry/bosh-utils/system"
+	"gopkg.in/yaml.v2"
 )
 
 type Manifest struct {
@@ -31,11 +31,11 @@ type PropertyDefinition struct {
 
 	// Non-raw field is populated by the validator.
 	DefaultRaw interface{} `yaml:"default"`
-	Default    interface{}
+	Default    interface{} `yaml:"-"`
 
 	// Non-raw field is populated by the validator.
 	ExampleRaw interface{} `yaml:"example"`
-	Example    interface{}
+	Example    interface{} `yaml:"-"`
 
 	Examples []PropertyExampleDefinition `yaml:"examples"`
 }
@@ -61,7 +61,7 @@ func NewManifestFromBytes(bytes []byte) (Manifest, error) {
 	var manifest Manifest
 	var job Job
 
-	err := candiedyaml.Unmarshal(bytes, &job)
+	err := yaml.Unmarshal(bytes, &job)
 	if err != nil {
 		return manifest, bosherr.WrapError(err, "Parsing job")
 	}

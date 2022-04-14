@@ -1,14 +1,16 @@
 # code.cloudfoundry.org/clock v1.0.0
-## explicit
 code.cloudfoundry.org/clock
-# github.com/aryann/difflib v0.0.0-20170710044230-e206f873d14a
-github.com/aryann/difflib
-# github.com/bmatcuk/doublestar v1.1.3
+# code.cloudfoundry.org/tlsconfig v0.0.0-20211123175040-23cc9f05b6b3
+code.cloudfoundry.org/tlsconfig
+# github.com/aryann/difflib v0.0.0-20210328193216-ff5ff6dc229b
 ## explicit
+github.com/aryann/difflib
+# github.com/bmatcuk/doublestar v1.3.4
 github.com/bmatcuk/doublestar
-# github.com/bmizerany/pat v0.0.0-20170815010413-6226ea591a40
+# github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f
+## explicit
 github.com/bmizerany/pat
-# github.com/bosh-dep-forks/bosh-provisioner v0.0.0-20190716171913-841d73b9d5f9
+# github.com/bosh-dep-forks/bosh-provisioner v0.0.0-20220414210959-1376d045132c
 ## explicit
 github.com/bosh-dep-forks/bosh-provisioner/deployment
 github.com/bosh-dep-forks/bosh-provisioner/deployment/manifest
@@ -19,13 +21,9 @@ github.com/bosh-dep-forks/bosh-provisioner/release/job/manifest
 github.com/bosh-dep-forks/bosh-provisioner/release/manifest
 github.com/bosh-dep-forks/bosh-provisioner/tar
 github.com/bosh-dep-forks/bosh-provisioner/util
-# github.com/charlievieth/fs v0.0.0-20170613215519-7dc373669fa1
+# github.com/charlievieth/fs v0.0.2
 github.com/charlievieth/fs
-# github.com/cloudfoundry-incubator/candiedyaml v0.0.0-20170901234223-a41693b7b7af
-## explicit
-github.com/cloudfoundry-incubator/candiedyaml
-# github.com/cloudfoundry/bosh-agent v2.235.0+incompatible
-## explicit
+# github.com/cloudfoundry/bosh-agent v2.367.0+incompatible
 github.com/cloudfoundry/bosh-agent/agent/action
 github.com/cloudfoundry/bosh-agent/agent/action/state
 github.com/cloudfoundry/bosh-agent/agent/alert
@@ -38,6 +36,8 @@ github.com/cloudfoundry/bosh-agent/agent/applier/packages
 github.com/cloudfoundry/bosh-agent/agent/blobstore
 github.com/cloudfoundry/bosh-agent/agent/cmdrunner
 github.com/cloudfoundry/bosh-agent/agent/compiler
+github.com/cloudfoundry/bosh-agent/agent/httpblobprovider
+github.com/cloudfoundry/bosh-agent/agent/httpblobprovider/blobstore_delegator
 github.com/cloudfoundry/bosh-agent/agent/script
 github.com/cloudfoundry/bosh-agent/agent/script/cmd
 github.com/cloudfoundry/bosh-agent/agent/script/drain
@@ -46,6 +46,7 @@ github.com/cloudfoundry/bosh-agent/agent/tarpath
 github.com/cloudfoundry/bosh-agent/agent/task
 github.com/cloudfoundry/bosh-agent/handler
 github.com/cloudfoundry/bosh-agent/infrastructure/devicepathresolver
+github.com/cloudfoundry/bosh-agent/ini
 github.com/cloudfoundry/bosh-agent/jobsupervisor
 github.com/cloudfoundry/bosh-agent/jobsupervisor/monit
 github.com/cloudfoundry/bosh-agent/jobsupervisor/monitor
@@ -66,7 +67,7 @@ github.com/cloudfoundry/bosh-agent/platform/windows/disk
 github.com/cloudfoundry/bosh-agent/platform/windows/powershell
 github.com/cloudfoundry/bosh-agent/settings
 github.com/cloudfoundry/bosh-agent/settings/directories
-# github.com/cloudfoundry/bosh-utils v0.0.0-20190713100226-7d4439633a6f
+# github.com/cloudfoundry/bosh-utils v0.0.309
 ## explicit
 github.com/cloudfoundry/bosh-utils/blobstore
 github.com/cloudfoundry/bosh-utils/crypto
@@ -80,15 +81,11 @@ github.com/cloudfoundry/bosh-utils/uuid
 github.com/cloudfoundry/bosh-utils/work
 # github.com/cloudfoundry/go-socks5 v0.0.0-20180221174514-54f73bdb8a8e
 github.com/cloudfoundry/go-socks5
-# github.com/cloudfoundry/gosigar v1.1.0
-## explicit
+# github.com/cloudfoundry/gosigar v1.3.3
 github.com/cloudfoundry/gosigar
 github.com/cloudfoundry/gosigar/sys/windows
-# github.com/cloudfoundry/socks5-proxy v0.2.0
-## explicit
+# github.com/cloudfoundry/socks5-proxy v0.2.50
 github.com/cloudfoundry/socks5-proxy
-# github.com/cloudfoundry/yagnats v0.0.0-20191003180638-5cab3e099974
-## explicit
 # github.com/concourse/concourse v1.6.1-0.20210729233333-b047d257f253
 ## explicit
 github.com/concourse/concourse/atc
@@ -96,31 +93,34 @@ github.com/concourse/concourse/vars
 # github.com/cppforlife/go-semi-semantic v0.0.0-20160921010311-576b6af77ae4
 ## explicit
 github.com/cppforlife/go-semi-semantic/version
-# github.com/hashicorp/errwrap v1.0.0
+# github.com/hashicorp/errwrap v1.1.0
+## explicit
 github.com/hashicorp/errwrap
 # github.com/hashicorp/go-multierror v1.1.1
 github.com/hashicorp/go-multierror
-# github.com/jessevdk/go-flags v1.4.1-0.20200711081900-c17162fe8fd7
+# github.com/jessevdk/go-flags v1.5.0
 github.com/jessevdk/go-flags
-# github.com/mattn/go-colorable v0.1.8
+# github.com/jpillora/backoff v1.0.0
+github.com/jpillora/backoff
+# github.com/mattn/go-colorable v0.1.12
+## explicit
 github.com/mattn/go-colorable
-# github.com/mattn/go-isatty v0.0.13
+# github.com/mattn/go-isatty v0.0.14
 github.com/mattn/go-isatty
-# github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b
+# github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
+## explicit
 github.com/mgutz/ansi
 # github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 ## explicit
 github.com/nu7hatch/gouuid
-# github.com/onsi/gomega v1.14.0
+# github.com/onsi/gomega v1.19.0
+## explicit
 github.com/onsi/gomega
 github.com/onsi/gomega/format
 github.com/onsi/gomega/gbytes
 github.com/onsi/gomega/gexec
-github.com/onsi/gomega/internal/assertion
-github.com/onsi/gomega/internal/asyncassertion
-github.com/onsi/gomega/internal/defaults
-github.com/onsi/gomega/internal/oraclematcher
-github.com/onsi/gomega/internal/testingtsupport
+github.com/onsi/gomega/internal
+github.com/onsi/gomega/internal/gutil
 github.com/onsi/gomega/matchers
 github.com/onsi/gomega/matchers/support/goraph/bipartitegraph
 github.com/onsi/gomega/matchers/support/goraph/edge
@@ -128,34 +128,32 @@ github.com/onsi/gomega/matchers/support/goraph/node
 github.com/onsi/gomega/matchers/support/goraph/util
 github.com/onsi/gomega/types
 # github.com/pivotal-cf/paraphernalia v0.0.0-20180203224945-a64ae2051c20
-## explicit
 github.com/pivotal-cf/paraphernalia/secure/tlsconfig
 # github.com/pivotal/go-smtpd v0.0.0-20140108210614-0af6982457e5
-## explicit
 github.com/pivotal/go-smtpd/smtpd
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
 # github.com/tedsuo/rata v1.0.1-0.20170830210128-07d200713958
 github.com/tedsuo/rata
-# golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2
+# golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20
 golang.org/x/crypto/curve25519
+golang.org/x/crypto/curve25519/internal/field
 golang.org/x/crypto/ed25519
-golang.org/x/crypto/ed25519/internal/edwards25519
+golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/internal/subtle
-golang.org/x/crypto/poly1305
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
-# golang.org/x/net v0.0.0-20210614182718-04defd469f4e
+# golang.org/x/net v0.0.0-20220412020605-290c469a71a5
 golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
 golang.org/x/net/internal/socks
 golang.org/x/net/proxy
-# golang.org/x/sys v0.0.0-20210603081109-ebe580a85c40
+# golang.org/x/sys v0.0.0-20220412211240-33da011f77ad
 golang.org/x/sys/cpu
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
@@ -163,7 +161,7 @@ golang.org/x/sys/windows
 golang.org/x/sys/windows/registry
 golang.org/x/sys/windows/svc
 golang.org/x/sys/windows/svc/mgr
-# golang.org/x/text v0.3.6
+# golang.org/x/text v0.3.7
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -187,5 +185,6 @@ gopkg.in/yaml.v1
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit
 gopkg.in/yaml.v2
-# sigs.k8s.io/yaml v1.2.0
+# sigs.k8s.io/yaml v1.3.0
+## explicit
 sigs.k8s.io/yaml
