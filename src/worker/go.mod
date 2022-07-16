@@ -3,7 +3,7 @@ module github.com/bosh-io/worker/src/worker
 go 1.18
 
 require (
-	github.com/bosh-dep-forks/bosh-provisioner v0.0.0-20220414210959-1376d045132c
+	github.com/bosh-dep-forks/bosh-provisioner v0.0.0-20220716015024-96bea0cbc86d
 	github.com/cloudfoundry/bosh-utils v0.0.322
 	github.com/concourse/concourse v1.6.1-0.20210729233333-b047d257f253
 	github.com/cppforlife/go-semi-semantic v0.0.0-20160921010311-576b6af77ae4
@@ -31,6 +31,7 @@ require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
+	github.com/nats-io/nats.go v1.16.0 // indirect
 	github.com/onsi/gomega v1.19.0 // indirect
 	github.com/pivotal-cf/paraphernalia v0.0.0-20180203224945-a64ae2051c20 // indirect
 	github.com/pivotal/go-smtpd v0.0.0-20140108210614-0af6982457e5 // indirect

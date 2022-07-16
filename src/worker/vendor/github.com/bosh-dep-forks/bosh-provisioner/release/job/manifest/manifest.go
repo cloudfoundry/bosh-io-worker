@@ -45,7 +45,7 @@ type PropertyExampleDefinition struct {
 
 	// Non-raw field is populated by the validator.
 	ValueRaw interface{} `yaml:"value"`
-	Value    interface{}
+	Value    interface{} `yaml:"-"`
 }
 
 func NewManifestFromPath(path string, fs boshsys.FileSystem) (Manifest, error) {
