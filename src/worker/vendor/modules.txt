@@ -1,17 +1,20 @@
 # code.cloudfoundry.org/clock v1.0.0
+## explicit
 code.cloudfoundry.org/clock
-# code.cloudfoundry.org/tlsconfig v0.0.0-20211123175040-23cc9f05b6b3
+# code.cloudfoundry.org/tlsconfig v0.0.0-20220621140725-0e6fbd869921
+## explicit; go 1.17
 code.cloudfoundry.org/tlsconfig
 # github.com/aryann/difflib v0.0.0-20210328193216-ff5ff6dc229b
 ## explicit
 github.com/aryann/difflib
 # github.com/bmatcuk/doublestar v1.3.4
+## explicit; go 1.12
 github.com/bmatcuk/doublestar
 # github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f
 ## explicit
 github.com/bmizerany/pat
 # github.com/bosh-dep-forks/bosh-provisioner v0.0.0-20220414210959-1376d045132c
-## explicit
+## explicit; go 1.16
 github.com/bosh-dep-forks/bosh-provisioner/deployment
 github.com/bosh-dep-forks/bosh-provisioner/deployment/manifest
 github.com/bosh-dep-forks/bosh-provisioner/downloader
@@ -22,8 +25,10 @@ github.com/bosh-dep-forks/bosh-provisioner/release/manifest
 github.com/bosh-dep-forks/bosh-provisioner/tar
 github.com/bosh-dep-forks/bosh-provisioner/util
 # github.com/charlievieth/fs v0.0.2
+## explicit; go 1.15
 github.com/charlievieth/fs
 # github.com/cloudfoundry/bosh-agent v2.367.0+incompatible
+## explicit
 github.com/cloudfoundry/bosh-agent/agent/action
 github.com/cloudfoundry/bosh-agent/agent/action/state
 github.com/cloudfoundry/bosh-agent/agent/alert
@@ -67,8 +72,8 @@ github.com/cloudfoundry/bosh-agent/platform/windows/disk
 github.com/cloudfoundry/bosh-agent/platform/windows/powershell
 github.com/cloudfoundry/bosh-agent/settings
 github.com/cloudfoundry/bosh-agent/settings/directories
-# github.com/cloudfoundry/bosh-utils v0.0.309
-## explicit
+# github.com/cloudfoundry/bosh-utils v0.0.322
+## explicit; go 1.18
 github.com/cloudfoundry/bosh-utils/blobstore
 github.com/cloudfoundry/bosh-utils/crypto
 github.com/cloudfoundry/bosh-utils/errors
@@ -80,14 +85,17 @@ github.com/cloudfoundry/bosh-utils/system
 github.com/cloudfoundry/bosh-utils/uuid
 github.com/cloudfoundry/bosh-utils/work
 # github.com/cloudfoundry/go-socks5 v0.0.0-20180221174514-54f73bdb8a8e
+## explicit
 github.com/cloudfoundry/go-socks5
-# github.com/cloudfoundry/gosigar v1.3.3
+# github.com/cloudfoundry/gosigar v1.3.4
+## explicit; go 1.18
 github.com/cloudfoundry/gosigar
 github.com/cloudfoundry/gosigar/sys/windows
-# github.com/cloudfoundry/socks5-proxy v0.2.50
+# github.com/cloudfoundry/socks5-proxy v0.2.64
+## explicit; go 1.18
 github.com/cloudfoundry/socks5-proxy
 # github.com/concourse/concourse v1.6.1-0.20210729233333-b047d257f253
-## explicit
+## explicit; go 1.16
 github.com/concourse/concourse/atc
 github.com/concourse/concourse/vars
 # github.com/cppforlife/go-semi-semantic v0.0.0-20160921010311-576b6af77ae4
@@ -97,15 +105,19 @@ github.com/cppforlife/go-semi-semantic/version
 ## explicit
 github.com/hashicorp/errwrap
 # github.com/hashicorp/go-multierror v1.1.1
+## explicit; go 1.13
 github.com/hashicorp/go-multierror
 # github.com/jessevdk/go-flags v1.5.0
+## explicit; go 1.15
 github.com/jessevdk/go-flags
 # github.com/jpillora/backoff v1.0.0
+## explicit; go 1.13
 github.com/jpillora/backoff
 # github.com/mattn/go-colorable v0.1.12
-## explicit
+## explicit; go 1.13
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.14
+## explicit; go 1.12
 github.com/mattn/go-isatty
 # github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 ## explicit
@@ -114,7 +126,7 @@ github.com/mgutz/ansi
 ## explicit
 github.com/nu7hatch/gouuid
 # github.com/onsi/gomega v1.19.0
-## explicit
+## explicit; go 1.18
 github.com/onsi/gomega
 github.com/onsi/gomega/format
 github.com/onsi/gomega/gbytes
@@ -128,15 +140,19 @@ github.com/onsi/gomega/matchers/support/goraph/node
 github.com/onsi/gomega/matchers/support/goraph/util
 github.com/onsi/gomega/types
 # github.com/pivotal-cf/paraphernalia v0.0.0-20180203224945-a64ae2051c20
+## explicit
 github.com/pivotal-cf/paraphernalia/secure/tlsconfig
 # github.com/pivotal/go-smtpd v0.0.0-20140108210614-0af6982457e5
+## explicit
 github.com/pivotal/go-smtpd/smtpd
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
 # github.com/tedsuo/rata v1.0.1-0.20170830210128-07d200713958
+## explicit
 github.com/tedsuo/rata
-# golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
+# golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
+## explicit; go 1.17
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20
 golang.org/x/crypto/curve25519
@@ -146,14 +162,16 @@ golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/internal/subtle
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
-# golang.org/x/net v0.0.0-20220412020605-290c469a71a5
+# golang.org/x/net v0.0.0-20220708220712-1185a9018129
+## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
 golang.org/x/net/internal/socks
 golang.org/x/net/proxy
-# golang.org/x/sys v0.0.0-20220412211240-33da011f77ad
+# golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8
+## explicit; go 1.17
 golang.org/x/sys/cpu
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
@@ -162,6 +180,7 @@ golang.org/x/sys/windows/registry
 golang.org/x/sys/windows/svc
 golang.org/x/sys/windows/svc/mgr
 # golang.org/x/text v0.3.7
+## explicit; go 1.17
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -183,8 +202,8 @@ golang.org/x/text/transform
 ## explicit
 gopkg.in/yaml.v1
 # gopkg.in/yaml.v2 v2.4.0
-## explicit
+## explicit; go 1.15
 gopkg.in/yaml.v2
 # sigs.k8s.io/yaml v1.3.0
-## explicit
+## explicit; go 1.12
 sigs.k8s.io/yaml
