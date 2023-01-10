@@ -9,9 +9,9 @@ resources:
 - name: releases-index
   type: git
   source:
-    uri: ((releases_index_git_url))
+    uri: git@github.com:bosh-io/releases-index.git
     branch: master
-    private_key: ((releases_index_private_key))
+    private_key: ((github_deploy_key_releases-index.private_key))
 
 - name: worker
   type: git

@@ -30,9 +30,9 @@ func NewOrgPipeline(name string) *OrgPipeline {
 					Name: "releases-index",
 					Type: "git",
 					Source: atc.Source{
-						"uri":         "((releases_index_git_url))",
+						"uri":         "git@github.com:bosh-io/releases-index.git",
 						"branch":      "master",
-						"private_key": "((releases_index_private_key))",
+						"private_key": "((github_deploy_key_releases-index.private_key))",
 					},
 				},
 				atc.ResourceConfig{
@@ -151,8 +151,8 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 						Step: &atc.TaskStep{
 							Name: "sync",
 							Params: atc.TaskEnv{
-								"AWS_ACCESS_KEY_ID":     "((s3_access_key_id))",
-								"AWS_SECRET_ACCESS_KEY": "((s3_secret_access_key))",
+								"AWS_ACCESS_KEY_ID":     "((worker-release-tarballs-uploader_aws_access_key.username))",
+								"AWS_SECRET_ACCESS_KEY": "((worker-release-tarballs-uploader_aws_access_key.password))",
 							},
 							Config: &atc.TaskConfig{
 								Platform: "linux",
@@ -194,7 +194,7 @@ echo "235bc60706793977446529830c2cb319e6aaf2da  /usr/bin/meta4" | shasum -c -
 chmod +x /usr/bin/meta4
 taskdir=$PWD
 cd worker/src/worker
-go run create-releases.go "$taskdir/release" "$taskdir/releases-index/%s" "%s" "((s3_endpoint))"
+go run create-releases.go "$taskdir/release" "$taskdir/releases-index/%s" "%s" "s3://s3-external-1.amazonaws.com/bosh-hub-release-tarballs"
 `,
 											strings.TrimPrefix(string(r.URL), "https://"),
 											minVersion,
