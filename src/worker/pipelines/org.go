@@ -160,8 +160,7 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 								ImageResource: &atc.ImageResource{
 									Type: "docker-image",
 									Source: atc.Source{
-										"repository": "golang",
-										"tag":        "1.20",
+										"repository": "bosh/integration",
 									},
 								},
 								Inputs: []atc.TaskInputConfig{
@@ -187,12 +186,6 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 										fmt.Sprintf(
 											`
 set -eu
-wget -O /usr/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-5.4.0-linux-amd64
-echo "ecc1b6464adf9a0ede464b8699525a473e05e7205357e4eb198599edf1064f57  /usr/bin/bosh" | sha256sum -c -
-chmod +x /usr/bin/bosh
-wget -O /usr/bin/meta4 https://github.com/dpb587/metalink/releases/download/v0.5.0/meta4-0.5.0-linux-amd64
-echo "9f3ff22e1ac3a8b4a667a9505dce2a224e099475ab69a02b23813ad073e27e01  /usr/bin/meta4" | shasum -c -
-chmod +x /usr/bin/meta4
 taskdir=$PWD
 cd worker/src/worker
 go run create-releases.go "$taskdir/release" "$taskdir/releases-index/%s" "%s" "s3://s3-external-1.amazonaws.com/bosh-hub-release-tarballs"
