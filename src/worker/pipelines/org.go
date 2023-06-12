@@ -161,7 +161,7 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 									Type: "docker-image",
 									Source: atc.Source{
 										"repository": "golang",
-										"tag":        "1.16",
+										"tag":        "1.20",
 									},
 								},
 								Inputs: []atc.TaskInputConfig{
