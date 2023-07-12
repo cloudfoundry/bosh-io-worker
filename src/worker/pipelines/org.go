@@ -30,8 +30,8 @@ func NewOrgPipeline(name string) *OrgPipeline {
 					Name: "releases-index",
 					Type: "git",
 					Source: atc.Source{
-						"uri":         "git@github.com:bosh-io/releases-index.git",
-						"branch":      "master",
+						"uri":         "git@github.com:cloudfoundry/bosh-io-releases-index.git",
+						"branch":      "main",
 						"private_key": "((github_deploy_key_releases-index.private_key))",
 					},
 				},

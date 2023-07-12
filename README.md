@@ -1,5 +1,5 @@
 # worker
-Deploys a set of Concourse pipelines to build releases for bosh.io. Follow usage instructions below to update release pipelines. These script will looks at the [releases repo](https://github.com/bosh-io/releases) to build pipelines by github org.
+Deploys a set of Concourse pipelines to build releases for bosh.io. Follow usage instructions below to update release pipelines. These script will looks at the [releases repo](https://github.com/cloudfoundry/bosh-io-releases) to build pipelines by github org.
 
 ## Usage
 
@@ -10,7 +10,6 @@ are defined in the same package
 
 ```
 $ fly -t bosh-io login -c https://ci.bosh-ecosystem.cf-app.com/ -n team-bosh-io
-$ lpass login <your accoutn>
 $ ./bin/sync-pipelines
 ```
 

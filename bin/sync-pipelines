@@ -15,13 +15,6 @@ pushd "$( dirname "$releases_index" )" >/dev/null
 popd >/dev/null
 
 echo
-echo "Checking lpass status...."
-if [[ $(lpass status -q; echo $?) != 0 ]]; then
-  echo "Login with lpass first"
-  exit 1
-fi
-
-echo
 echo "Synchronizing pipelines..."
 
 pushd ./src/worker >/dev/null
