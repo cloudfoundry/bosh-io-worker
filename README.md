@@ -3,7 +3,7 @@ Deploys a set of Concourse pipelines to build releases for bosh.io. Follow usage
 
 ## Usage
 
-git clone `worker` and `releases` to the same parent directory
+git clone `bosh-io-worker` and `bosh-io-releases` to the same parent directory
 
 note: `bin/test` will report `go vet` warnings because several `main` functions
 are defined in the same package
@@ -14,6 +14,16 @@ $ ./bin/sync-pipelines
 ```
 
 ## Notes
+
+If you get an error, "cannot find module providing package github.com/pkg/errors: import lookup disabled by -mod=vendor", then do the following:
+
+```bash
+cd src/worker
+go mod vendor
+cd ../..
+```
+
+More notes:
 
 ```
  schemaname |      relname      | n_live_tup

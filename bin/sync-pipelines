@@ -3,7 +3,7 @@
 set -eu
 
 worker_dir="$( cd "$( dirname "$0" )" && cd .. && pwd )"
-releases_index="${worker_dir}/../releases/index.yml"
+releases_index="${worker_dir}/../bosh-io-releases/index.yml"
 
 echo "If this fails run: fly -t bosh-io login -c https://ci.bosh-ecosystem.cf-app.com -n team-bosh-io"
 fly -t bosh-io status
