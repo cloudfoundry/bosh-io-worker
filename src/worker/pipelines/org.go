@@ -153,7 +153,6 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 							Params: atc.TaskEnv{
 								"AWS_ACCESS_KEY_ID":     "((worker-release-tarballs-uploader_assume_aws_access_key.username))",
 								"AWS_SECRET_ACCESS_KEY": "((worker-release-tarballs-uploader_assume_aws_access_key.password))",
-								"AWS_ROLE_ARN":          "((worker-release-tarballs-uploader_assume_aws_access_key.role_arn))",
 							},
 							Config: &atc.TaskConfig{
 								Platform: "linux",

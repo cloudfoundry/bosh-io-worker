@@ -9,7 +9,7 @@ note: `bin/test` will report `go vet` warnings because several `main` functions
 are defined in the same package
 
 ```
-$ fly -t bosh-io login -c https://ci.bosh-ecosystem.cf-app.com/ -n team-bosh-io
+$ fly -t bosh-io login -c https://bosh.ci.cloudfoundry.org// -n bosh-io
 $ ./bin/sync-pipelines
 ```
 
