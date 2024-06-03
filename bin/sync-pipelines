@@ -5,7 +5,7 @@ set -eu
 worker_dir="$( cd "$( dirname "$0" )" && cd .. && pwd )"
 releases_index="${worker_dir}/../bosh-io-releases/index.yml"
 
-echo "If this fails run: fly -t bosh-io login -c https://bosh.ci.cloudfoundry.org/ -n bosh-io"
+echo "If this fails run: fly -t bosh-io login -c https://bosh.ci.cloudfoundry.org/ -n x-bosh-io"
 fly -t bosh-io status
 
 echo
