@@ -37,7 +37,7 @@ type tarballVal struct {
 }
 
 // eg   {"Source":"github.com/cloudfoundry-incubator/diego-release","VersionRaw":"0.549"} |
-// {"BlobID":"4cbebec9-36e1-4214-6cd5-d8118a85826b","SHA1":"18ef9e77924728f752bce6e4adeb9754c165291d","DownloadURL":"https://s3.amazonaws.com/bosh-hub-releases/4cbebec9-36e1-4214-6cd5-d8118a85826b"}
+// {"BlobID":"4cbebec9-36e1-4214-6cd5-d8118a85826b","SHA1":"18ef9e77924728f752bce6e4adeb9754c165291d","DownloadURL":"https://s3.amazonaws.com/boshio-releases/4cbebec9-36e1-4214-6cd5-d8118a85826b"}
 func (r ReleaseTarballs) Import(data io.Reader) error {
 	rd := bufio.NewReader(data)
 	for {
@@ -112,7 +112,7 @@ func (r ReleaseTarballs) Import(data io.Reader) error {
 <metalink xmlns="urn:ietf:params:xml:ns:metalink">
   <file name="%s.tgz">
     <hash type="sha-1">%s</hash>
-    <url>https://s3.amazonaws.com/bosh-hub-release-tarballs/%s</url>
+    <url>https://s3.amazonaws.com/boshio-release-tarballs/%s</url>
     <version>%s</version>
   </file>
 </metalink>

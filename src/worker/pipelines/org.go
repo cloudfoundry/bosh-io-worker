@@ -188,7 +188,7 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 set -eu
 taskdir=$PWD
 cd worker/src/worker
-go run create-releases.go "$taskdir/release" "$taskdir/releases-index/%s" "%s" "s3://s3-external-1.amazonaws.com/bosh-hub-release-tarballs"
+go run create-releases.go "$taskdir/release" "$taskdir/releases-index/%s" "%s" "s3://s3-external-1.amazonaws.com/boshio-release-tarballs"
 `,
 											strings.TrimPrefix(string(r.URL), "https://"),
 											minVersion,
