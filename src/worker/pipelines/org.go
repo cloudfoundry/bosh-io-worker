@@ -157,7 +157,7 @@ func (op *OrgPipeline) AddRelease(r releases.Release) {
 							Config: &atc.TaskConfig{
 								Platform: "linux",
 								ImageResource: &atc.ImageResource{
-									Type: "docker-image",
+									Type: "registry-image",
 									Source: atc.Source{
 										"repository": "bosh/integration",
 									},
