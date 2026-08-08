@@ -2,6 +2,8 @@ module github.com/bosh-io/worker/src/worker
 
 go 1.25.0
 
+toolchain go1.25.0
+
 require (
 	github.com/bosh-dep-forks/bosh-provisioner v0.0.0-20241217205932-40fb8b191414
 	github.com/cloudfoundry/bosh-utils v0.0.515
