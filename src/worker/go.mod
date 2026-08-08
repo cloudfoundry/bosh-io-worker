@@ -2,8 +2,6 @@ module github.com/bosh-io/worker/src/worker
 
 go 1.25.0
 
-toolchain go1.25.0
-
 require (
 	github.com/bosh-dep-forks/bosh-provisioner v0.0.0-20241217205932-40fb8b191414
 	github.com/cloudfoundry/bosh-utils v0.0.515
@@ -47,7 +45,7 @@ require (
 	github.com/pivotal/go-smtpd v0.0.0-20140108210614-0af6982457e5 // indirect
 	github.com/tedsuo/rata v1.0.1-0.20170830210128-07d200713958 // indirect
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
-	golang.org/x/crypto v0.51.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20241210194714-1829a127f884 // indirect
 	golang.org/x/mod v0.35.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
