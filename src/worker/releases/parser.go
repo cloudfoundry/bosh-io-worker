@@ -1,23 +1,23 @@
 package releases
 
 import (
+	"fmt"
 	"io/ioutil"
 
-	"github.com/pkg/errors"
 	yaml "gopkg.in/yaml.v1"
 )
 
 func LoadFile(path string) (Index, error) {
 	indexBytes, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, errors.Wrap(err, "reading file")
+		return nil, fmt.Errorf("reading file: %w", err)
 	}
 
 	var index Index
 
 	err = yaml.Unmarshal(indexBytes, &index)
 	if err != nil {
-		return nil, errors.Wrap(err, "unmarshaling")
+		return nil, fmt.Errorf("unmarshaling: %w", err)
 	}
 
 	return index, nil
